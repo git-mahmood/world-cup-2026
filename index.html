@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f172a">
+<title>WC 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:#0f172a;color:#f1f5f9;font-family:'Inter',sans-serif;}
+  #app{min-height:100vh;padding-bottom:80px;}
+
+  #bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(234,179,8,0.15);display:flex;justify-content:space-around;padding:8px 0 12px;}
+  .nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 16px;cursor:pointer;border:none;background:none;}
+  .nav-btn svg{color:#475569;transition:color .2s;}
+  .nav-btn span{font-size:11px;font-weight:600;color:#475569;transition:color .2s;}
+  .nav-btn.active svg,.nav-btn.active span{color:#eab308;}
+
+  .view{display:none;}
+  .view.active{display:block;animation:fadeUp .2s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{background:#1e293b;border:1px solid rgba(255,255,255,0.07);border-radius:14px;}
+  .gold-line{height:2px;background:linear-gradient(90deg,#eab308,transparent);border-radius:2px;}
+
+  .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s;display:flex;flex-direction:column;}
+  .overlay.open{opacity:1;pointer-events:all;}
+  .overlay-sheet{margin-top:auto;background:#0f172a;border-top:1px solid rgba(234,179,8,0.2);border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);}
+  .overlay.open .overlay-sheet{transform:translateY(0);}
+
+  .modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.85);display:flex;align-items:flex-end;padding:16px 16px 96px;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .modal.open{opacity:1;pointer-events:all;}
+  .modal-box{background:#1e293b;border:1px solid rgba(234,179,8,0.2);border-radius:18px;width:100%;max-width:420px;margin:0 auto;padding:20px;transform:translateY(30px);transition:transform .3s cubic-bezier(.32,.72,0,1);}
+  .modal.open .modal-box{transform:translateY(0);}
+
+  #admin-panel{position:fixed;inset:0;z-index:400;background:#0f172a;overflow-y:auto;display:none;}
+  #admin-panel.open{display:block;animation:fadeUp .2s ease;}
+
+  body.locked{overflow:hidden;}
+
+  .inp{background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f1f5f9;padding:10px 12px;font-size:14px;width:100%;}
+  .inp:focus{outline:none;border-color:#eab308;}
+  .btn-gold{background:#eab308;color:#0f172a;font-weight:700;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-size:14px;}
+  .btn-ghost{background:transparent;border:1px solid #334155;color:#94a3b8;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;}
+  .btn-red{background:#7f1d1d;border:none;color:#fca5a5;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;}
+
+  .player-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;}
+  .player-row:last-child{border:none;}
+  .stat-cell{background:#0f172a;border-radius:10px;padding:10px;text-align:center;}
+
+  ::-webkit-scrollbar{width:3px;}
+  ::-webkit-scrollbar-thumb{background:#334155;border-radius:2px;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <header style="background:#0a1628;border-bottom:1px solid rgba(255,255,255,0.05);" class="sticky top-0 z-50 px-4 pt-10 pb-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <p style="font-size:10px;letter-spacing:.12em;color:#14b8a6;font-weight:700;">FIFA · 2026</p>
+        <h1 style="font-size:22px;font-weight:900;line-height:1.1;">World Cup <span style="color:#eab308;">Encyclopedia</span></h1>
+      </div>
+      <button onclick="openAdmin()" style="width:38px;height:38px;border-radius:10px;background:#1e293b;border:1px solid #334155;display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M20 21a8 8 0 10-16 0"/><path d="M16 11l2 2 4-4"/></svg>
+      </button>
+    </div>
+    <div class="gold-line mt-3"></div>
+  </header>
+
+  <!-- FIXTURES VIEW -->
+  <div id="view-fixtures" class="view active px-4 pt-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 style="font-weight:800;font-size:15px;">Fixtures</h2>
+      <span id="fixture-count" style="font-size:11px;color:#64748b;"></span>
+    </div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;" class="mb-4" id="filter-bar"></div>
+    <div id="fixtures-container" class="flex flex-col gap-3 pb-4">
+      <div style="text-align:center;padding:60px 0;color:#475569;">
+        <div style="font-size:40px;">⏳</div>
+        <p style="margin-top:8px;font-size:14px;">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAMS VIEW -->
+  <div id="view-teams" class="view px-4 pt-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 style="font-weight:800;font-size:15px;">Teams & Squads</h2>
+      <span id="team-count" style="font-size:11px;color:#64748b;"></span>
+    </div>
+    <div id="teams-container" class="pb-4">
+      <div style="text-align:center;padding:60px 0;color:#475569;">
+        <div style="font-size:40px;">⏳</div>
+        <p style="margin-top:8px;font-size:14px;">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS VIEW -->
+  <div id="view-stats" class="view px-4 pt-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 style="font-weight:800;font-size:15px;">Player Stats</h2>
+    </div>
+    <div id="stats-container" class="pb-4">
+      <div style="text-align:center;padding:60px 0;color:#475569;">
+        <div style="font-size:40px;">⏳</div>
+        <p style="margin-top:8px;font-size:14px;">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav id="bottom-nav">
+  <button class="nav-btn active" id="nav-fixtures" onclick="switchView('fixtures')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>Fixtures</span>
+  </button>
+  <button class="nav-btn" id="nav-teams" onclick="switchView('teams')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+    <span>Teams</span>
+  </button>
+  <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <span>Stats</span>
+  </button>
+</nav>
+
+<!-- SQUAD OVERLAY -->
+<div id="squad-overlay" class="overlay" onclick="maybeCloseOverlay(event,'squad-overlay')">
+  <div class="overlay-sheet w-full" id="squad-sheet" style="padding:20px 16px 40px;"></div>
+</div>
+
+<!-- PLAYER MODAL -->
+<div id="player-modal" class="modal" onclick="maybeCloseModal(event,'player-modal')">
+  <div class="modal-box" id="player-modal-box"></div>
+</div>
+
+<!-- ========== ADMIN PANEL ========== -->
+<div id="admin-panel">
+
+  <!-- Login -->
+  <div id="admin-login" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;">
+    <div style="width:100%;max-width:340px;">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-size:36px;">⚙️</div>
+        <h2 style="font-size:20px;font-weight:900;margin-top:8px;">Admin Dashboard</h2>
+        <p style="font-size:13px;color:#64748b;margin-top:4px;">Private — enter your PIN</p>
+      </div>
+      <label style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:6px;">PIN</label>
+      <input id="pin-input" type="password" class="inp" placeholder="Enter PIN" style="margin-bottom:12px;" onkeydown="if(event.key==='Enter')checkPin()">
+      <button class="btn-gold" onclick="checkPin()" style="width:100%;">Enter</button>
+      <button class="btn-ghost" onclick="closeAdmin()" style="width:100%;margin-top:8px;">Cancel</button>
+      <p id="pin-error" style="color:#ef4444;font-size:12px;text-align:center;margin-top:8px;display:none;">Wrong PIN.</p>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div id="admin-main" style="display:none;">
+    <div style="background:#1e293b;border-bottom:1px solid #334155;padding:52px 16px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
+      <div>
+        <p style="font-size:10px;color:#14b8a6;font-weight:700;letter-spacing:.1em;">ADMIN</p>
+        <h2 style="font-size:18px;font-weight:900;">WC 2026 Manager</h2>
+      </div>
+      <button class="btn-ghost" onclick="closeAdmin()">✕ Close</button>
+    </div>
+
+    <div style="padding:16px;">
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;">
+        <button class="btn-gold admin-tab" id="tab-fixtures" onclick="adminTab('fixtures')" style="white-space:nowrap;font-size:13px;">📅 Fixtures</button>
+        <button class="btn-ghost admin-tab" id="tab-players" onclick="adminTab('players')" style="white-space:nowrap;font-size:13px;">👤 Players</button>
+        <button class="btn-ghost admin-tab" id="tab-settings" onclick="adminTab('settings')" style="white-space:nowrap;font-size:13px;">⚙️ Settings</button>
+      </div>
+
+      <!-- FIXTURES TAB -->
+      <div id="admin-fixtures" class="admin-section">
+        <h3 style="font-weight:800;margin-bottom:4px;font-size:15px;">Add Fixture</h3>
+        <p style="font-size:12px;color:#64748b;margin-bottom:14px;">Teams are loaded from <code style="color:#eab308;">data.json</code>. Pick from dropdowns.</p>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team 1</label>
+              <select id="f-t1" class="inp"></select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team 2</label>
+              <select id="f-t2" class="inp"></select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Score T1</label>
+              <input id="f-g1" class="inp" placeholder="–" type="number">
+            </div>
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Score T2</label>
+              <input id="f-g2" class="inp" placeholder="–" type="number">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Stage</label>
+              <select id="f-stage" class="inp">
+                <option>Group Stage</option>
+                <option>Round of 32</option>
+                <option>Round of 16</option>
+                <option>Quarter-Final</option>
+                <option>Semi-Final</option>
+                <option>3rd Place</option>
+                <option>Final</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Group</label>
+              <input id="f-group" class="inp" placeholder="A  (optional)">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Date</label>
+              <input id="f-date" class="inp" type="date">
+            </div>
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Time</label>
+              <input id="f-time" class="inp" placeholder="18:00">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Venue</label>
+            <input id="f-venue" class="inp" placeholder="e.g. MetLife Stadium, New Jersey">
+          </div>
+        </div>
+
+        <button class="btn-gold" onclick="addFixture()" style="width:100%;">+ Add Fixture</button>
+
+        <div style="margin-top:20px;">
+          <p style="font-size:12px;color:#64748b;margin-bottom:10px;">Added this session — <strong style="color:#eab308;">copy the JSON below and update your data.json on GitHub to save permanently.</strong></p>
+          <div id="admin-fixtures-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div id="export-fixtures-box" style="display:none;margin-top:12px;">
+            <p style="font-size:11px;color:#64748b;margin-bottom:6px;">📋 Copy this into <code style="color:#eab308;">data.json</code> → fixtures array:</p>
+            <textarea id="fixtures-json-out" class="inp" style="height:120px;font-size:11px;font-family:monospace;" readonly></textarea>
+            <button class="btn-ghost" onclick="copyFixturesJSON()" style="width:100%;margin-top:6px;">📋 Copy JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAYERS TAB -->
+      <div id="admin-players" class="admin-section" style="display:none;">
+        <h3 style="font-weight:800;margin-bottom:4px;font-size:15px;">Add Player</h3>
+        <p style="font-size:12px;color:#64748b;margin-bottom:14px;">Teams loaded from <code style="color:#eab308;">data.json</code>.</p>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+          <div>
+            <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team</label>
+            <select id="p-team" class="inp"></select>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Player Name</label>
+              <input id="p-name" class="inp" placeholder="Full name">
+            </div>
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Jersey #</label>
+              <input id="p-num" class="inp" placeholder="10" type="number">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Position</label>
+              <select id="p-pos" class="inp">
+                <option value="GK">GK</option>
+                <option value="DEF">DEF</option>
+                <option value="MID">MID</option>
+                <option value="FWD">FWD</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Age</label>
+              <input id="p-age" class="inp" placeholder="25" type="number">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Club</label>
+            <input id="p-club" class="inp" placeholder="e.g. Real Madrid">
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Goals</label><input id="p-goals" class="inp" placeholder="0" type="number"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Assists</label><input id="p-assists" class="inp" placeholder="0" type="number"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Played</label><input id="p-played" class="inp" placeholder="0" type="number"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Mins</label><input id="p-mins" class="inp" placeholder="0" type="number"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Yellow</label><input id="p-yc" class="inp" placeholder="0" type="number"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Red</label><input id="p-rc" class="inp" placeholder="0" type="number"></div>
+          </div>
+        </div>
+
+        <button class="btn-gold" onclick="addPlayer()" style="width:100%;">+ Add Player</button>
+
+        <div style="margin-top:20px;">
+          <p style="font-size:12px;color:#64748b;margin-bottom:10px;"><strong style="color:#eab308;">Copy JSON below → update data.json on GitHub to save permanently.</strong></p>
+          <div id="admin-players-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div id="export-players-box" style="display:none;margin-top:12px;">
+            <p style="font-size:11px;color:#64748b;margin-bottom:6px;">📋 Copy into <code style="color:#eab308;">data.json</code> → players array:</p>
+            <textarea id="players-json-out" class="inp" style="height:120px;font-size:11px;font-family:monospace;" readonly></textarea>
+            <button class="btn-ghost" onclick="copyPlayersJSON()" style="width:100%;margin-top:6px;">📋 Copy JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="admin-settings" class="admin-section" style="display:none;">
+        <h3 style="font-weight:800;margin-bottom:16px;font-size:15px;">Settings</h3>
+
+        <div class="card" style="padding:16px;margin-bottom:12px;">
+          <p style="font-weight:700;font-size:14px;margin-bottom:4px;">Change Admin PIN</p>
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Default is <strong style="color:#eab308;">1234</strong></p>
+          <input id="new-pin" type="password" class="inp" placeholder="New PIN" style="margin-bottom:8px;">
+          <input id="confirm-pin" type="password" class="inp" placeholder="Confirm PIN" style="margin-bottom:8px;">
+          <button class="btn-gold" onclick="changePin()" style="width:100%;">Update PIN</button>
+          <p id="pin-change-msg" style="font-size:12px;margin-top:6px;text-align:center;"></p>
+        </div>
+
+        <div class="card" style="padding:16px;margin-bottom:12px;">
+          <p style="font-weight:700;font-size:14px;margin-bottom:8px;">How to publish updates</p>
+          <ol style="font-size:12px;color:#94a3b8;line-height:2;padding-left:16px;">
+            <li>Add fixtures/players via this admin panel</li>
+            <li>Copy the JSON output shown</li>
+            <li>Open <code style="color:#eab308;">data.json</code> in your GitHub repo</li>
+            <li>Paste into the correct array</li>
+            <li>Commit — everyone sees it instantly ✓</li>
+          </ol>
+        </div>
+
+        <div class="card" style="padding:16px;">
+          <p style="font-weight:700;font-size:14px;margin-bottom:8px;">Export full data.json</p>
+          <p style="font-size:12px;color:#64748b;margin-bottom:10px;">Download the complete current data to replace your GitHub file.</p>
+          <button class="btn-gold" onclick="exportFullJSON()" style="width:100%;">⬇️ Download data.json</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SQUAD OVERLAY -->
+<div id="squad-overlay" class="overlay" onclick="maybeCloseOverlay(event,'squad-overlay')">
+  <div class="overlay-sheet w-full" id="squad-sheet" style="padding:20px 16px 40px;"></div>
+</div>
+
+<!-- PLAYER MODAL -->
+<div id="player-modal" class="modal" onclick="maybeCloseModal(event,'player-modal')">
+  <div class="modal-box" id="player-modal-box"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+//  STATE — loaded from data.json
+// ─────────────────────────────────────────
+let DB = { teams: [], fixtures: [], players: [] };
+// Session additions (before user commits to GitHub)
+let SESSION = { fixtures: [], players: [] };
+
+// ─────────────────────────────────────────
+//  LOAD DATA.JSON
+// ─────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('data.json?v=' + Date.now());
+    if (!res.ok) throw new Error('not found');
+    DB = await res.json();
+    DB.fixtures = DB.fixtures || [];
+    DB.players  = DB.players  || [];
+    DB.teams    = DB.teams    || [];
+  } catch(e) {
+    // Running locally without a server — show helpful message
+    console.warn('data.json not fetched (expected when opening file:// directly).');
+    DB = { teams: [], fixtures: [], players: [] };
+  }
+  renderFixtures();
+  renderTeams();
+  renderStats();
+}
+
+// All data = DB + session additions
+function allFixtures() { return [...DB.fixtures, ...SESSION.fixtures]; }
+function allPlayers()  { return [...DB.players,  ...SESSION.players];  }
+function allTeams()    { return DB.teams; }
+
+// ─────────────────────────────────────────
+//  VIEW SWITCHER
+// ─────────────────────────────────────────
+function switchView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  document.getElementById('nav-' + v).classList.add('active');
+  if (v === 'fixtures') renderFixtures();
+  if (v === 'teams')    renderTeams();
+  if (v === 'stats')    renderStats();
+}
+
+// ─────────────────────────────────────────
+//  FIXTURES
+// ─────────────────────────────────────────
+let activeFilter = 'All';
+
+function renderFixtures() {
+  const fixtures = allFixtures();
+  const container = document.getElementById('fixtures-container');
+  const filterBar = document.getElementById('filter-bar');
+  document.getElementById('fixture-count').textContent = fixtures.length + ' matches';
+
+  const stages = ['All', ...new Set(fixtures.map(f => f.stage).filter(Boolean))];
+  filterBar.innerHTML = stages.map(s => `
+    <button onclick="setFilter('${s}')" style="padding:6px 14px;border-radius:999px;border:1px solid ${activeFilter===s?'#eab308':'#334155'};background:${activeFilter===s?'#eab308':'transparent'};color:${activeFilter===s?'#0f172a':'#94a3b8'};font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;">${s}</button>
+  `).join('');
+
+  const filtered = activeFilter === 'All' ? fixtures : fixtures.filter(f => f.stage === activeFilter);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📅</div><p style="margin-top:8px;font-size:14px;">No fixtures yet.</p></div>`;
+    return;
+  }
+
+  const byDate = {};
+  filtered.forEach(f => { (byDate[f.date] = byDate[f.date]||[]).push(f); });
+
+  container.innerHTML = Object.keys(byDate).sort().map(date => {
+    const d   = new Date(date + 'T00:00:00');
+    const lbl = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    return `
+      <div style="display:flex;align-items:center;gap:8px;margin:8px 0 4px;">
+        <div style="height:1px;flex:1;background:rgba(255,255,255,0.06);"></div>
+        <span style="font-size:11px;color:#64748b;font-weight:600;">${lbl}</span>
+        <div style="height:1px;flex:1;background:rgba(255,255,255,0.06);"></div>
+      </div>
+      ${byDate[date].map(f => {
+        const t1 = allTeams().find(t => t.id === f.t1 || t.name === f.t1) || {};
+        const t2 = allTeams().find(t => t.id === f.t2 || t.name === f.t2) || {};
+        return `
+          <div class="card" style="padding:14px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:11px;background:rgba(20,184,166,0.15);color:#2dd4bf;padding:2px 8px;border-radius:999px;font-weight:600;">${f.group ? 'Group '+f.group : f.stage}</span>
+              <span style="font-size:11px;color:#64748b;">${f.time||''} ${f.venue ? '· '+f.venue : ''}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                <span style="font-size:28px;">${t1.flag||f.f1||'🏳️'}</span>
+                <span style="font-size:12px;font-weight:700;text-align:center;">${t1.name||f.t1||'TBD'}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;">
+                <div style="font-size:22px;font-weight:900;color:#eab308;letter-spacing:2px;">${f.g1 != null ? f.g1 : '–'} : ${f.g2 != null ? f.g2 : '–'}</div>
+                <span style="font-size:10px;color:#475569;">${f.g1 != null ? 'FT' : 'vs'}</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                <span style="font-size:28px;">${t2.flag||f.f2||'🏳️'}</span>
+                <span style="font-size:12px;font-weight:700;text-align:center;">${t2.name||f.t2||'TBD'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    `;
+  }).join('');
+}
+
+function setFilter(f) { activeFilter = f; renderFixtures(); }
+
+// ─────────────────────────────────────────
+//  TEAMS
+// ─────────────────────────────────────────
+function renderTeams() {
+  const teams = allTeams();
+  const container = document.getElementById('teams-container');
+  document.getElementById('team-count').textContent = teams.length + ' nations';
+
+  if (!teams.length) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">🌍</div><p style="margin-top:8px;font-size:14px;">No teams in data.json yet.</p></div>`;
+    return;
+  }
+
+  const byGroup = {};
+  teams.forEach(t => { const g = t.group||'?'; (byGroup[g]=byGroup[g]||[]).push(t); });
+
+  container.innerHTML = Object.keys(byGroup).sort().map(g => `
+    <div style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;">GROUP ${g}</span>
+        <div style="height:1px;flex:1;background:rgba(255,255,255,0.06);"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${byGroup[g].map(t => `
+          <div class="card" style="padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openSquad('${t.id}')">
+            <span style="font-size:24px;">${t.flag||'🏳️'}</span>
+            <div style="min-width:0;">
+              <p style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.name}</p>
+              <p style="font-size:11px;color:#64748b;">${t.manager||'Manager TBC'}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────
+//  SQUAD OVERLAY
+// ─────────────────────────────────────────
+function openSquad(teamId) {
+  const team = allTeams().find(t => t.id === teamId);
+  if (!team) return;
+  const squad = allPlayers().filter(p => p.team === teamId);
+  const byPos = { GK:[], DEF:[], MID:[], FWD:[] };
+  squad.forEach(p => { if (byPos[p.pos]) byPos[p.pos].push(p); });
+  const posLabel = { GK:'Goalkeepers 🧤', DEF:'Defenders 🛡️', MID:'Midfielders ⚙️', FWD:'Forwards ⚡' };
+  const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
+
+  let html = '';
+  ['GK','DEF','MID','FWD'].forEach(pos => {
+    if (!byPos[pos].length) return;
+    html += `
+      <div style="margin-bottom:18px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${posColor[pos]};margin-bottom:6px;">${posLabel[pos]}</p>
+        ${byPos[pos].map(p => `
+          <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${teamId}')">
+            <div style="width:28px;height:28px;border-radius:999px;background:#1e293b;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="font-size:11px;font-weight:700;color:#94a3b8;">${p.num||'?'}</span>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+              <p style="font-size:11px;color:#64748b;">${p.club||'—'}</p>
+            </div>
+            <svg width="14" height="14" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  });
+
+  if (!squad.length) html = `<p style="color:#64748b;font-size:14px;padding:20px 0;">No players added yet.</p>`;
+
+  document.getElementById('squad-sheet').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:44px;">${team.flag||'🏳️'}</span>
+        <div>
+          <h2 style="font-size:18px;font-weight:900;">${team.name}</h2>
+          <p style="font-size:12px;color:#64748b;">Group ${team.group||'?'} · ${team.manager||'Manager TBC'}</p>
+        </div>
+      </div>
+      <button onclick="closeOverlay('squad-overlay')" style="width:34px;height:34px;border-radius:999px;background:#1e293b;border:none;color:#94a3b8;font-size:18px;cursor:pointer;">×</button>
+    </div>
+    <div class="gold-line" style="margin-bottom:16px;"></div>
+    ${html}
+  `;
+  document.getElementById('squad-overlay').classList.add('open');
+  document.body.classList.add('locked');
+}
+
+// ─────────────────────────────────────────
+//  PLAYER MODAL
+// ─────────────────────────────────────────
+function openPlayerModal(playerId, teamId) {
+  const p    = allPlayers().find(pl => (pl.id||pl.name) === playerId && pl.team === teamId);
+  const team = allTeams().find(t => t.id === teamId);
+  if (!p) return;
+  const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
+
+  document.getElementById('player-modal-box').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:36px;">${team?.flag||'🏳️'}</span>
+        <div>
+          <p style="font-size:16px;font-weight:900;">${p.name}</p>
+          <p style="font-size:12px;color:${posColor[p.pos]||'#94a3b8'};">${p.pos} · ${team?.name||p.team}</p>
+        </div>
+      </div>
+      <button onclick="closeModal('player-modal')" style="width:32px;height:32px;border-radius:999px;background:#0f172a;border:none;color:#94a3b8;font-size:16px;cursor:pointer;">×</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+      <div class="stat-cell"><p style="font-size:18px;font-weight:900;">#${p.num||'?'}</p><p style="font-size:11px;color:#64748b;">Jersey</p></div>
+      <div class="stat-cell"><p style="font-size:18px;font-weight:900;">${p.age||'?'}</p><p style="font-size:11px;color:#64748b;">Age</p></div>
+      <div class="stat-cell"><p style="font-size:16px;font-weight:900;color:${posColor[p.pos]||'#fff'};">${p.pos}</p><p style="font-size:11px;color:#64748b;">Position</p></div>
+    </div>
+    <div style="background:#0f172a;border-radius:10px;padding:10px 12px;margin-bottom:12px;">
+      <p style="font-size:11px;color:#64748b;">Current Club</p>
+      <p style="font-size:14px;font-weight:700;margin-top:2px;">🏟 ${p.club||'—'}</p>
+    </div>
+    <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#475569;margin-bottom:8px;">TOURNAMENT STATS</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+      <div class="stat-cell"><p style="font-size:20px;font-weight:900;">${p.played||0}</p><p style="font-size:11px;color:#64748b;">Played</p></div>
+      <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#eab308;">${p.goals||0}</p><p style="font-size:11px;color:#64748b;">Goals ⚽</p></div>
+      <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#2dd4bf;">${p.assists||0}</p><p style="font-size:11px;color:#64748b;">Assists</p></div>
+      <div class="stat-cell"><p style="font-size:20px;font-weight:900;">${p.mins||0}</p><p style="font-size:11px;color:#64748b;">Mins</p></div>
+      <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#fbbf24;">${p.yc||0}</p><p style="font-size:11px;color:#64748b;">Yellow 🟨</p></div>
+      <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#ef4444;">${p.rc||0}</p><p style="font-size:11px;color:#64748b;">Red 🟥</p></div>
+    </div>
+  `;
+  document.getElementById('player-modal').classList.add('open');
+}
+
+// ─────────────────────────────────────────
+//  STATS
+// ─────────────────────────────────────────
+function renderStats() {
+  const players   = allPlayers();
+  const container = document.getElementById('stats-container');
+  if (!players.length) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📊</div><p style="margin-top:8px;font-size:14px;">No player data yet.</p></div>`;
+    return;
+  }
+  const scorers  = [...players].filter(p=>p.goals>0).sort((a,b)=>b.goals-a.goals).slice(0,10);
+  const assisters= [...players].filter(p=>p.assists>0).sort((a,b)=>b.assists-a.assists).slice(0,5);
+  const getFlag  = id => allTeams().find(t=>t.id===id)?.flag||'🏳️';
+  const getTeam  = id => allTeams().find(t=>t.id===id)?.name||id;
+
+  const row = (p,i,stat,color,lbl) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;" onclick="openPlayerModal('${p.id||p.name}','${p.team}')">
+      <span style="font-size:12px;font-weight:700;color:#475569;width:18px;">${i+1}</span>
+      <span style="font-size:20px;">${getFlag(p.team)}</span>
+      <div style="flex:1;"><p style="font-size:13px;font-weight:700;">${p.name}</p><p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p></div>
+      <span style="font-size:18px;font-weight:900;color:${color};">${p[stat]||0}</span>
+      <span style="font-size:11px;color:#64748b;">${lbl}</span>
+    </div>`;
+
+  container.innerHTML = `
+    <div style="margin-bottom:24px;">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:12px;">⚽ TOP SCORERS</p>
+      <div class="card" style="padding:4px 12px;">${scorers.length ? scorers.map((p,i)=>row(p,i,'goals','#eab308','goals')).join('') : '<p style="color:#475569;font-size:13px;padding:12px 0;">No goals recorded yet.</p>'}</div>
+    </div>
+    <div>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:12px;">🎯 TOP ASSISTS</p>
+      <div class="card" style="padding:4px 12px;">${assisters.length ? assisters.map((p,i)=>row(p,i,'assists','#2dd4bf','ast')).join('') : '<p style="color:#475569;font-size:13px;padding:12px 0;">No assists recorded yet.</p>'}</div>
+    </div>
+  `;
+}
+
+// ─────────────────────────────────────────
+//  OVERLAY / MODAL
+// ─────────────────────────────────────────
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); document.body.classList.remove('locked'); }
+function closeModal(id)   { document.getElementById(id).classList.remove('open'); }
+function maybeCloseOverlay(e,id) { if(e.target===document.getElementById(id)) closeOverlay(id); }
+function maybeCloseModal(e,id)   { if(e.target===document.getElementById(id)) closeModal(id); }
+
+// ─────────────────────────────────────────
+//  ADMIN
+// ─────────────────────────────────────────
+function openAdmin() {
+  document.getElementById('admin-panel').classList.add('open');
+  document.getElementById('admin-login').style.display = 'flex';
+  document.getElementById('admin-main').style.display  = 'none';
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-error').style.display = 'none';
+  document.body.classList.add('locked');
+}
+function closeAdmin() {
+  document.getElementById('admin-panel').classList.remove('open');
+  document.body.classList.remove('locked');
+}
+function checkPin() {
+  const val = document.getElementById('pin-input').value;
+  if (val === (localStorage.getItem('wc26_pin')||'1234')) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-main').style.display  = 'block';
+    adminTab('fixtures');
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+    document.getElementById('pin-input').value = '';
+  }
+}
+
+function adminTab(tab) {
+  document.querySelectorAll('.admin-section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.admin-tab').forEach(b=>{ b.style.background='transparent'; b.style.border='1px solid #334155'; b.style.color='#94a3b8'; });
+  document.getElementById('admin-'+tab).style.display='block';
+  const btn = document.getElementById('tab-'+tab);
+  btn.style.background='#eab308'; btn.style.border='1px solid #eab308'; btn.style.color='#0f172a';
+  if (tab==='fixtures') { populateTeamDropdowns('f-t1','f-t2'); renderAdminFixtures(); }
+  if (tab==='players')  { populateTeamDropdowns('p-team'); renderAdminPlayers(); }
+}
+
+function populateTeamDropdowns(...ids) {
+  const teams = allTeams();
+  const opts  = teams.length
+    ? '<option value="">Pick team...</option>' + teams.map(t=>`<option value="${t.id}">${t.flag||''} ${t.name}</option>`).join('')
+    : '<option value="">No teams in data.json</option>';
+  ids.forEach(id => { document.getElementById(id).innerHTML = opts; });
+}
+
+// ── ADD FIXTURE ──
+function addFixture() {
+  const t1id = document.getElementById('f-t1').value;
+  const t2id = document.getElementById('f-t2').value;
+  if (!t1id || !t2id) { alert('Select both teams.'); return; }
+  const f = {
+    id:    Date.now(),
+    t1:    t1id,
+    t2:    t2id,
+    g1:    document.getElementById('f-g1').value !== '' ? parseInt(document.getElementById('f-g1').value) : null,
+    g2:    document.getElementById('f-g2').value !== '' ? parseInt(document.getElementById('f-g2').value) : null,
+    stage: document.getElementById('f-stage').value,
+    group: document.getElementById('f-group').value.trim().toUpperCase(),
+    date:  document.getElementById('f-date').value,
+    time:  document.getElementById('f-time').value.trim(),
+    venue: document.getElementById('f-venue').value.trim(),
+  };
+  SESSION.fixtures.push(f);
+  ['f-g1','f-g2','f-group','f-time','f-venue','f-date'].forEach(id=>document.getElementById(id).value='');
+  renderAdminFixtures();
+  renderFixtures();
+  alert('Fixture added ✓  (Copy the JSON below → paste into data.json on GitHub to save permanently)');
+}
+
+function renderAdminFixtures() {
+  const list = SESSION.fixtures;
+  const el   = document.getElementById('admin-fixtures-list');
+  const box  = document.getElementById('export-fixtures-box');
+  if (!list.length) { el.innerHTML='<p style="color:#475569;font-size:13px;">Nothing added this session.</p>'; box.style.display='none'; return; }
+  const teams = allTeams();
+  el.innerHTML = list.slice().reverse().map(f => {
+    const t1 = teams.find(t=>t.id===f.t1)||{name:f.t1};
+    const t2 = teams.find(t=>t.id===f.t2)||{name:f.t2};
+    return `
+      <div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;">
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t1.flag||''} ${t1.name} vs ${t2.flag||''} ${t2.name}</p>
+          <p style="font-size:11px;color:#64748b;">${f.date||''} · ${f.stage}</p>
+        </div>
+        <button class="btn-red" onclick="removeSession('fixtures',${f.id})">Del</button>
+      </div>`;
+  }).join('');
+  box.style.display='block';
+  document.getElementById('fixtures-json-out').value = JSON.stringify(list, null, 2);
+}
+
+// ── ADD PLAYER ──
+function addPlayer() {
+  const teamId = document.getElementById('p-team').value;
+  const name   = document.getElementById('p-name').value.trim();
+  if (!teamId || !name) { alert('Select a team and enter a name.'); return; }
+  const p = {
+    id:      Date.now(),
+    team:    teamId,
+    name,
+    num:     document.getElementById('p-num').value.trim(),
+    pos:     document.getElementById('p-pos').value,
+    age:     document.getElementById('p-age').value.trim(),
+    club:    document.getElementById('p-club').value.trim(),
+    goals:   parseInt(document.getElementById('p-goals').value)||0,
+    assists: parseInt(document.getElementById('p-assists').value)||0,
+    played:  parseInt(document.getElementById('p-played').value)||0,
+    mins:    parseInt(document.getElementById('p-mins').value)||0,
+    yc:      parseInt(document.getElementById('p-yc').value)||0,
+    rc:      parseInt(document.getElementById('p-rc').value)||0,
+  };
+  SESSION.players.push(p);
+  ['p-name','p-num','p-age','p-club','p-goals','p-assists','p-played','p-mins','p-yc','p-rc'].forEach(id=>document.getElementById(id).value='');
+  renderAdminPlayers();
+  renderStats();
+  alert('Player added ✓  (Copy the JSON below → paste into data.json on GitHub)');
+}
+
+function renderAdminPlayers() {
+  const list  = SESSION.players;
+  const teams = allTeams();
+  const el    = document.getElementById('admin-players-list');
+  const box   = document.getElementById('export-players-box');
+  if (!list.length) { el.innerHTML='<p style="color:#475569;font-size:13px;">Nothing added this session.</p>'; box.style.display='none'; return; }
+  el.innerHTML = list.slice().reverse().map(p=>{
+    const team = teams.find(t=>t.id===p.team)||{};
+    return `
+      <div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px;">${team.flag||'🏳️'}</span>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">#${p.num||'?'} ${p.name}</p>
+          <p style="font-size:11px;color:#64748b;">${p.pos} · ${team.name||p.team}</p>
+        </div>
+        <button class="btn-red" onclick="removeSession('players',${p.id})">Del</button>
+      </div>`;
+  }).join('');
+  box.style.display='block';
+  document.getElementById('players-json-out').value = JSON.stringify(list, null, 2);
+}
+
+function removeSession(type, id) {
+  SESSION[type] = SESSION[type].filter(x=>x.id!==id);
+  if (type==='fixtures') { renderAdminFixtures(); renderFixtures(); }
+  if (type==='players')  { renderAdminPlayers();  renderStats(); }
+}
+
+function copyFixturesJSON() { navigator.clipboard.writeText(document.getElementById('fixtures-json-out').value).then(()=>alert('Copied!')); }
+function copyPlayersJSON()  { navigator.clipboard.writeText(document.getElementById('players-json-out').value).then(()=>alert('Copied!')); }
+
+// ── SETTINGS ──
+function changePin() {
+  const np  = document.getElementById('new-pin').value;
+  const cp  = document.getElementById('confirm-pin').value;
+  const msg = document.getElementById('pin-change-msg');
+  if (!np) { msg.style.color='#ef4444'; msg.textContent='Enter a new PIN.'; return; }
+  if (np!==cp) { msg.style.color='#ef4444'; msg.textContent='PINs do not match.'; return; }
+  localStorage.setItem('wc26_pin', np);
+  msg.style.color='#34d399'; msg.textContent='PIN updated ✓';
+  document.getElementById('new-pin').value='';
+  document.getElementById('confirm-pin').value='';
+}
+
+function exportFullJSON() {
+  const full = {
+    teams:    DB.teams,
+    fixtures: allFixtures(),
+    players:  allPlayers(),
+  };
+  const blob = new Blob([JSON.stringify(full, null, 2)], {type:'application/json'});
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = 'data.json';
+  a.click();
+}
+
+// ─────────────────────────────────────────
+//  BOOT
+// ─────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
