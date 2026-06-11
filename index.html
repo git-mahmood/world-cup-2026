@@ -738,6 +738,7 @@ function renderAdminFixtures() {
           <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t1.flag||''} ${t1.name} vs ${t2.flag||''} ${t2.name}</p>
           <p style="font-size:11px;color:#64748b;">${f.date||''} · ${f.stage}</p>
         </div>
+        <button class="btn-ghost" onclick="editSessionFixture(${f.id})" style="font-size:12px;padding:6px 10px;">✏️</button>
         <button class="btn-red" onclick="removeSession('fixtures',${f.id})">Del</button>
       </div>`;
   }).join('');
@@ -787,6 +788,7 @@ function renderAdminPlayers() {
           <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">#${p.num||'?'} ${p.name}</p>
           <p style="font-size:11px;color:#64748b;">${p.pos} · ${team.name||p.team}</p>
         </div>
+        <button class="btn-ghost" onclick="editSessionPlayer(${p.id})" style="font-size:12px;padding:6px 10px;">✏️</button>
         <button class="btn-red" onclick="removeSession('players',${p.id})">Del</button>
       </div>`;
   }).join('');
@@ -794,6 +796,39 @@ function renderAdminPlayers() {
   document.getElementById('players-json-out').value = JSON.stringify(list, null, 2);
 }
 
+function editSessionFixture(id) {
+  const f = SESSION.fixtures.find(x=>x.id===id);
+  if (!f) return;
+  document.getElementById('f-t1').value    = f.t1;
+  document.getElementById('f-t2').value    = f.t2;
+  document.getElementById('f-g1').value    = f.g1 ?? '';
+  document.getElementById('f-g2').value    = f.g2 ?? '';
+  document.getElementById('f-stage').value = f.stage;
+  document.getElementById('f-group').value = f.group;
+  document.getElementById('f-date').value  = f.date;
+  document.getElementById('f-time').value  = f.time;
+  document.getElementById('f-venue').value = f.venue;
+  removeSession('fixtures', id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function editSessionPlayer(id) {
+  const p = SESSION.players.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('p-team').value    = p.team;
+  document.getElementById('p-name').value    = p.name;
+  document.getElementById('p-num').value     = p.num;
+  document.getElementById('p-pos').value     = p.pos;
+  document.getElementById('p-age').value     = p.age;
+  document.getElementById('p-club').value    = p.club;
+  document.getElementById('p-goals').value   = p.goals;
+  document.getElementById('p-assists').value = p.assists;
+  document.getElementById('p-played').value  = p.played;
+  document.getElementById('p-mins').value    = p.mins;
+  document.getElementById('p-yc').value      = p.yc;
+  document.getElementById('p-rc').value      = p.rc;
+  removeSession('players', id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 function removeSession(type, id) {
   SESSION[type] = SESSION[type].filter(x=>x.id!==id);
   if (type==='fixtures') { renderAdminFixtures(); renderFixtures(); }
