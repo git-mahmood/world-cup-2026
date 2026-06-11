@@ -452,11 +452,11 @@ function renderFixtures() {
           <div class="card" style="padding:14px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
               <span style="font-size:11px;background:rgba(20,184,166,0.15);color:#2dd4bf;padding:2px 8px;border-radius:999px;font-weight:600;">${f.group ? 'Group '+f.group : f.stage}</span>
-              <span style="font-size:11px;color:#64748b;">${f.time||''} ${f.venue ? '· '+f.venue : ''}</span>
+              <span style="font-size:11px;color:#64748b;">${f.time ? (h=>{const[hh,mm]=h.split(':');const hr=+hh;return (hr%12||12)+':'+(mm||'00')+' '+(hr<12?'AM':'PM');})(f.time) : ''} ${f.venue ? '· '+f.venue : ''}</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
-                <span style="font-size:28px;">${t1.flag||f.f1||'🏳️'}</span>
+                <span style="font-size:28px;">${t1.flag||'🏳️'}</span>
                 <span style="font-size:12px;font-weight:700;text-align:center;">${t1.name||f.t1||'TBD'}</span>
               </div>
               <div style="display:flex;flex-direction:column;align-items:center;">
@@ -464,7 +464,7 @@ function renderFixtures() {
                 <span style="font-size:10px;color:#475569;">${f.g1 != null ? 'FT' : 'vs'}</span>
               </div>
               <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
-                <span style="font-size:28px;">${t2.flag||f.f2||'🏳️'}</span>
+                <span style="font-size:28px;">${t2.flag||'🏳️'}</span>
                 <span style="font-size:12px;font-weight:700;text-align:center;">${t2.name||f.t2||'TBD'}</span>
               </div>
             </div>
