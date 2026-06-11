@@ -78,7 +78,7 @@
     { "id": 26, "t1": "SUI", "t2": "BIH", "g1": null, "g2": null, "date": "2026-06-19", "time": "01:00", "stage": "Group Stage", "group": "B", "venue": "Los Angeles Stadium" },
     { "id": 27, "t1": "CAN", "t2": "QAT", "g1": null, "g2": null, "date": "2026-06-19", "time": "04:00", "stage": "Group Stage", "group": "B", "venue": "BC Place Vancouver" },
     { "id": 28, "t1": "MEX", "t2": "KOR", "g1": null, "g2": null, "date": "2026-06-19", "time": "07:00", "stage": "Group Stage", "group": "A", "venue": "Guadalajara Stadium" },
-    { "id": 29, "t1": "BRA", "t2": "HAI", "g1": null, "g2": null, "date": "2026-06-20", "time": "00:30", "stage": "Group Stage", "group": "C", "venue": "Philadelphia Stadium" },
+    { "id": 29, "t1": "BRA", "t2": "HAI", "g1": null, "g2": null, "date": "2026-06-20", "time": "06:30", "stage": "Group Stage", "group": "C", "venue": "Philadelphia Stadium" },
     { "id": 30, "t1": "SCO", "t2": "MAR", "g1": null, "g2": null, "date": "2026-06-20", "time": "04:00", "stage": "Group Stage", "group": "C", "venue": "Boston Stadium" },
     { "id": 31, "t1": "TUR", "t2": "PAR", "g1": null, "g2": null, "date": "2026-06-20", "time": "09:00", "stage": "Group Stage", "group": "D", "venue": "San Francisco Bay Area Stadium" },
     { "id": 32, "t1": "USA", "t2": "AUS", "g1": null, "g2": null, "date": "2026-06-20", "time": "01:00", "stage": "Group Stage", "group": "D", "venue": "Seattle Stadium" },
