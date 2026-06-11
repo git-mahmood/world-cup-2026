@@ -1,0 +1,65 @@
+{
+  "teams": [
+    {"id": "MEX", "name": "Mexico", "flag": "🇲🇽", "group": "A", "manager": ""},
+    {"id": "KOR", "name": "South Korea", "flag": "🇰🇷", "group": "A", "manager": ""},
+    {"id": "RSA", "name": "South Africa", "flag": "🇿🇦", "group": "A", "manager": ""},
+    {"id": "CZE", "name": "Czechia", "flag": "🇨🇿", "group": "A", "manager": ""},
+
+    {"id": "CAN", "name": "Canada", "flag": "🇨🇦", "group": "B", "manager": ""},
+    {"id": "BIH", "name": "Bosnia and Herzegovina", "flag": "🇧🇦", "group": "B", "manager": ""},
+    {"id": "QAT", "name": "Qatar", "flag": "🇶🇦", "group": "B", "manager": ""},
+    {"id": "SUI", "name": "Switzerland", "flag": "🇨🇭", "group": "B", "manager": ""},
+
+    {"id": "BRA", "name": "Brazil", "flag": "🇧🇷", "group": "C", "manager": ""},
+    {"id": "MAR", "name": "Morocco", "flag": "🇲🇦", "group": "C", "manager": ""},
+    {"id": "HAI", "name": "Haiti", "flag": "🇭🇹", "group": "C", "manager": ""},
+    {"id": "SCO", "name": "Scotland", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "group": "C", "manager": ""},
+
+    {"id": "USA", "name": "United States", "flag": "🇺🇸", "group": "D", "manager": ""},
+    {"id": "PAR", "name": "Paraguay", "flag": "🇵🇾", "group": "D", "manager": ""},
+    {"id": "AUS", "name": "Australia", "flag": "🇦🇺", "group": "D", "manager": ""},
+    {"id": "TUR", "name": "Türkiye", "flag": "🇹🇷", "group": "D", "manager": ""},
+
+    {"id": "GER", "name": "Germany", "flag": "🇩🇪", "group": "E", "manager": ""},
+    {"id": "CIV", "name": "Côte d'Ivoire", "flag": "🇨🇮", "group": "E", "manager": ""},
+    {"id": "ECU", "name": "Ecuador", "flag": "🇪🇨", "group": "E", "manager": ""},
+    {"id": "CUW", "name": "Curaçao", "flag": "🇨🇼", "group": "E", "manager": ""},
+
+    {"id": "NED", "name": "Netherlands", "flag": "🇳🇱", "group": "F", "manager": ""},
+    {"id": "JPN", "name": "Japan", "flag": "🇯🇵", "group": "F", "manager": ""},
+    {"id": "SWE", "name": "Sweden", "flag": "🇸🇪", "group": "F", "manager": ""},
+    {"id": "TUN", "name": "Tunisia", "flag": "🇹🇳", "group": "F", "manager": ""},
+
+    {"id": "BEL", "name": "Belgium", "flag": "🇧🇪", "group": "G", "manager": ""},
+    {"id": "EGY", "name": "Egypt", "flag": "🇪🇬", "group": "G", "manager": ""},
+    {"id": "IRN", "name": "IR Iran", "flag": "🇮🇷", "group": "G", "manager": ""},
+    {"id": "NZL", "name": "New Zealand", "flag": "🇳🇿", "group": "G", "manager": ""},
+
+    {"id": "ESP", "name": "Spain", "flag": "🇪🇸", "group": "H", "manager": ""},
+    {"id": "URU", "name": "Uruguay", "flag": "🇺🇾", "group": "H", "manager": ""},
+    {"id": "KSA", "name": "Saudi Arabia", "flag": "🇸🇦", "group": "H", "manager": ""},
+    {"id": "CPV", "name": "Cabo Verde", "flag": "🇨🇻", "group": "H", "manager": ""},
+
+    {"id": "FRA", "name": "France", "flag": "🇫🇷", "group": "I", "manager": ""},
+    {"id": "SEN", "name": "Senegal", "flag": "🇸🇳", "group": "I", "manager": ""},
+    {"id": "NOR", "name": "Norway", "flag": "🇳🇴", "group": "I", "manager": ""},
+    {"id": "IRQ", "name": "Iraq", "flag": "🇮🇶", "group": "I", "manager": ""},
+
+    {"id": "ARG", "name": "Argentina", "flag": "🇦🇷", "group": "J", "manager": ""},
+    {"id": "ALG", "name": "Algeria", "flag": "🇩🇿", "group": "J", "manager": ""},
+    {"id": "AUT", "name": "Austria", "flag": "🇦🇹", "group": "J", "manager": ""},
+    {"id": "JOR", "name": "Jordan", "flag": "🇯🇴", "group": "J", "manager": ""},
+
+    {"id": "POR", "name": "Portugal", "flag": "🇵🇹", "group": "K", "manager": ""},
+    {"id": "COL", "name": "Colombia", "flag": "🇨🇴", "group": "K", "manager": ""},
+    {"id": "UZB", "name": "Uzbekistan", "flag": "🇺🇿", "group": "K", "manager": ""},
+    {"id": "COD", "name": "Congo DR", "flag": "🇨🇩", "group": "K", "manager": ""},
+
+    {"id": "ENG", "name": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "group": "L", "manager": ""},
+    {"id": "CRO", "name": "Croatia", "flag": "🇭🇷", "group": "L", "manager": ""},
+    {"id": "GHA", "name": "Ghana", "flag": "🇬🇭", "group": "L", "manager": ""},
+    {"id": "PAN", "name": "Panama", "flag": "🇵🇦", "group": "L", "manager": ""}
+  ],
+  "fixtures": [],
+  "players": []
+}
