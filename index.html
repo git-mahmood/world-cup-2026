@@ -376,7 +376,7 @@ let SESSION = { fixtures: [], players: [] };
 // ─────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch('data.json?v=' + Date.now());
+    const res = await fetch('./data.json?v=' + Date.now());
     if (!res.ok) throw new Error('not found');
     DB = await res.json();
     DB.fixtures = DB.fixtures || [];
