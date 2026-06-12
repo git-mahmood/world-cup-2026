@@ -50,7 +50,7 @@
     {"id": "PAN", "name": "Panama", "flag": "🇵🇦", "group": "L", "manager": ""}
   ],
   "fixtures": [
-   { "id": 1, "t1": "MEX", "t2": "RSA", "g1": null, "g2": null, "date": "2026-06-12", "time": "01:00", "stage": "Group Stage", "group": "A", "venue": "Mexico City Stadium" },
+   { "id": 1, "t1": "MEX", "t2": "RSA", "g1": 2, "g2": 0, "date": "2026-06-12", "time": "01:00", "stage": "Group Stage", "group": "A", "venue": "Mexico City Stadium" },
     { "id": 2, "t1": "KOR", "t2": "CZE", "g1": null, "g2": null, "date": "2026-06-12", "time": "08:00", "stage": "Group Stage", "group": "A", "venue": "Guadalajara Stadium" },
     { "id": 3, "t1": "CAN", "t2": "BIH", "g1": null, "g2": null, "date": "2026-06-13", "time": "01:00", "stage": "Group Stage", "group": "B", "venue": "Toronto Stadium" },
     { "id": 4, "t1": "USA", "t2": "PAR", "g1": null, "g2": null, "date": "2026-06-13", "time": "07:00", "stage": "Group Stage", "group": "D", "venue": "Los Angeles Stadium" },
