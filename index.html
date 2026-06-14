@@ -376,15 +376,16 @@ let SESSION = { fixtures: [], players: [] };
 // ─────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch('./data.json?v=' + Date.now());
-    if (!res.ok) throw new Error('not found');
-    DB = await res.json();
-    DB.fixtures = DB.fixtures || [];
-    DB.players  = DB.players  || [];
-    DB.teams    = DB.teams    || [];
+    const [teamsRes, fixturesRes, playersRes] = await Promise.all([
+      fetch('./teams.json?v=' + Date.now()),
+      fetch('./fixtures.json?v=' + Date.now()),
+      fetch('./players.json?v=' + Date.now())
+    ]);
+    DB.teams    = await teamsRes.json();
+    DB.fixtures = await fixturesRes.json();
+    DB.players  = await playersRes.json();
   } catch(e) {
-    // Running locally without a server — show helpful message
-    console.warn('data.json not fetched (expected when opening file:// directly).');
+    console.warn('JSON not fetched');
     DB = { teams: [], fixtures: [], players: [] };
   }
   renderFixtures();
