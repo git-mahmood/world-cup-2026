@@ -625,7 +625,7 @@ function openSquad(teamId) {
     if (!byPos[pos].length) return;
     html += `<div style="margin-bottom:18px;"><p style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${posColor[pos]};margin-bottom:6px;">${posLabel[pos]}</p>`;
     html += byPos[pos].map(p => `
-      <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${teamId}')">
+      <div class="player-row" onclick="openPlayerModal('${p.id}','${teamId}')">
         <div style="width:28px;height:28px;border-radius:999px;background:#1e293b;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <span style="font-size:11px;font-weight:700;color:#94a3b8;">${p.num||'?'}</span>
         </div>
@@ -659,7 +659,7 @@ function openSquad(teamId) {
 //  PLAYER MODAL
 // ─────────────────────────────────────────
 function openPlayerModal(playerId, teamId) {
-  const p    = allPlayers().find(pl => (pl.id||pl.name) === playerId && pl.team === teamId);
+  const p    = allPlayers().find(pl => (String(pl.id)||pl.name) === String(playerId) && String(pl.team) === String(teamId));
   const team = allTeams().find(t => t.id === teamId);
   if (!p) return;
   const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
@@ -707,7 +707,7 @@ function renderStats() {
   const getFlag = id => allTeams().find(t=>t.id===id)?.flag||'🏳️';
   const getTeam = id => allTeams().find(t=>t.id===id)?.name||id;
   const row = (p,i,stat,color,lbl) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;" onclick="openPlayerModal('${p.id||p.name}','${p.team}')">
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;" onclick="openPlayerModal('${p.id}','${p.team}')">
       <span style="font-size:12px;font-weight:700;color:#475569;width:18px;">${i+1}</span>
       <span style="font-size:20px;">${getFlag(p.team)}</span>
       <div style="flex:1;"><p style="font-size:13px;font-weight:700;">${p.name}</p><p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p></div>
