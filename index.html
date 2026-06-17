@@ -203,61 +203,6 @@
     </div>
     <div id="awards-container" class="pb-4"></div>
   </div>
-  
- <!-- Search -->
-  
-function renderSearch() {
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const container = document.getElementById('search-results');
-  if (!q) {
-    container.innerHTML = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">🔍</div><p style="margin-top:8px;font-size:14px;">Search for players or teams</p></div>`;
-    return;
-  }
-  const matchedTeams = allTeams().filter(t => t.name.toLowerCase().includes(q));
-  const matchedPlayers = allPlayers().filter(p => p.name.toLowerCase().includes(q) || (p.club||'').toLowerCase().includes(q));
-
-  let html = '';
-
-  if (matchedTeams.length) {
-    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:10px;">🌍 TEAMS</p>`;
-    html += `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">`;
-    html += matchedTeams.map(t => `
-      <div class="card" style="padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openSquad('${t.id}')">
-        <span style="font-size:28px;">${t.flag||'🏳️'}</span>
-        <div>
-          <p style="font-size:14px;font-weight:700;">${t.name}</p>
-          <p style="font-size:11px;color:#64748b;">Group ${t.group||'?'} · ${t.manager||'Manager TBC'}</p>
-        </div>
-      </div>`).join('');
-    html += `</div>`;
-  }
-
-  if (matchedPlayers.length) {
-    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:10px;">👤 PLAYERS</p>`;
-    html += `<div class="card" style="padding:4px 12px;">`;
-    const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
-    html += matchedPlayers.slice(0,30).map(p => {
-      const team = allTeams().find(t => t.id === p.team) || {};
-      return `
-        <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${p.team}')">
-          <span style="font-size:20px;">${team.flag||'🏳️'}</span>
-          <div style="flex:1;min-width:0;">
-            <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
-            <p style="font-size:11px;color:#64748b;">${p.club||'—'} · ${team.name||p.team}</p>
-          </div>
-          <span style="font-size:11px;font-weight:700;color:${posColor[p.pos]||'#94a3b8'};">${p.pos}</span>
-        </div>`;
-    }).join('');
-    html += `</div>`;
-    if (matchedPlayers.length > 30) html += `<p style="font-size:12px;color:#64748b;text-align:center;margin-top:10px;">Showing 30 of ${matchedPlayers.length} results</p>`;
-  }
-
-  if (!matchedTeams.length && !matchedPlayers.length) {
-    html = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">😔</div><p style="margin-top:8px;font-size:14px;">No results for "${q}"</p></div>`;
-  }
-
-  container.innerHTML = html;
-}
 
   <!-- BRACKET VIEW -->
   <div id="view-bracket" class="view pt-5">
