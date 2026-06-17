@@ -13,11 +13,9 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 
-  /* ── DARK MODE (default) ── */
   body{background:#0f172a;color:#f1f5f9;font-family:'Inter',sans-serif;transition:background .3s,color .3s;}
   .card{background:#1e293b;border:1px solid rgba(255,255,255,0.07);border-radius:14px;transition:background .3s;}
 
-  /* ── LIGHT MODE ── */
   body.light{background:#f1f5f9;color:#0f172a;}
   body.light .card{background:#ffffff;border:1px solid rgba(0,0,0,0.08);}
   body.light #bottom-nav{background:rgba(241,245,249,0.97);border-top:1px solid rgba(234,179,8,0.3);}
@@ -35,13 +33,16 @@
   body.light .search-box input{background:transparent;color:#0f172a;}
   body.light .standings-table th{color:#64748b;}
   body.light .standings-row:hover{background:rgba(0,0,0,0.03);}
+  body.light .bracket-match{background:#ffffff;border:1px solid rgba(0,0,0,0.1);}
+  body.light .bracket-team{border-bottom:1px solid rgba(0,0,0,0.06);}
+  body.light .bracket-line{background:#cbd5e1;}
 
   #app{min-height:100vh;padding-bottom:80px;}
 
   #bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(234,179,8,0.15);display:flex;justify-content:space-around;padding:8px 0 12px;}
-  .nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer;border:none;background:none;}
+  .nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;border:none;background:none;}
   .nav-btn svg{color:#475569;transition:color .2s;}
-  .nav-btn span{font-size:10px;font-weight:600;color:#475569;transition:color .2s;}
+  .nav-btn span{font-size:9px;font-weight:600;color:#475569;transition:color .2s;}
   .nav-btn.active svg,.nav-btn.active span{color:#eab308;}
 
   .view{display:none;}
@@ -75,12 +76,10 @@
   .player-row:last-child{border:none;}
   .stat-cell{background:#0f172a;border-radius:10px;padding:10px;text-align:center;}
 
-  /* Search */
   .search-box{display:flex;align-items:center;gap:8px;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:10px 14px;margin-bottom:16px;}
   .search-box input{flex:1;background:transparent;border:none;outline:none;color:#f1f5f9;font-size:14px;}
   .search-box input::placeholder{color:#475569;}
 
-  /* Standings */
   .standings-table{width:100%;border-collapse:collapse;font-size:12px;}
   .standings-table th{color:#64748b;font-weight:700;padding:6px 4px;text-align:center;font-size:11px;letter-spacing:.05em;}
   .standings-table th:first-child{text-align:left;}
@@ -88,9 +87,40 @@
   .standings-table td:first-child{text-align:left;}
   .standings-row{border-bottom:1px solid rgba(255,255,255,0.04);transition:background .15s;}
   .standings-row:hover{background:rgba(255,255,255,0.03);}
-  .qualify-dot{display:inline-block;width:6px;height:6px;border-radius:999px;margin-right:4px;}
 
-  /* Theme toggle */
+  /* Awards */
+  .award-tab{padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid #334155;color:#94a3b8;background:transparent;cursor:pointer;white-space:nowrap;transition:all .15s;}
+  .award-tab.active{background:#eab308;color:#0f172a;border-color:#eab308;}
+  .podium-card{border-radius:16px;padding:16px 12px;text-align:center;position:relative;}
+  .podium-1{background:linear-gradient(135deg,rgba(234,179,8,0.2),rgba(234,179,8,0.05));border:1px solid rgba(234,179,8,0.4);}
+  .podium-2{background:linear-gradient(135deg,rgba(148,163,184,0.15),rgba(148,163,184,0.04));border:1px solid rgba(148,163,184,0.3);}
+  .podium-3{background:linear-gradient(135deg,rgba(180,83,9,0.15),rgba(180,83,9,0.04));border:1px solid rgba(180,83,9,0.3);}
+  .rank-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;}
+  .rank-1{background:#eab308;color:#0f172a;}
+  .rank-2{background:#94a3b8;color:#0f172a;}
+  .rank-3{background:#b45309;color:#fff;}
+
+  /* Bracket */
+  .bracket-scroll{overflow-x:auto;padding-bottom:16px;-webkit-overflow-scrolling:touch;}
+  .bracket-scroll::-webkit-scrollbar{height:3px;}
+  .bracket-scroll::-webkit-scrollbar-thumb{background:#334155;border-radius:2px;}
+  .bracket-wrap{display:flex;gap:0;align-items:flex-start;min-width:max-content;padding:8px 0;}
+  .bracket-round{display:flex;flex-direction:column;align-items:center;min-width:130px;}
+  .bracket-round-label{font-size:9px;font-weight:700;letter-spacing:.1em;color:#64748b;text-transform:uppercase;margin-bottom:12px;text-align:center;}
+  .bracket-matches{display:flex;flex-direction:column;justify-content:space-around;flex:1;gap:0;}
+  .bracket-match{background:#1e293b;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;width:120px;cursor:pointer;transition:border-color .2s;}
+  .bracket-match:hover{border-color:rgba(234,179,8,0.4);}
+  .bracket-team{display:flex;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.05);}
+  .bracket-team:last-child{border-bottom:none;}
+  .bracket-team.winner{background:rgba(234,179,8,0.08);}
+  .bracket-flag{font-size:14px;flex-shrink:0;}
+  .bracket-name{font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+  .bracket-score{font-size:11px;font-weight:900;color:#eab308;flex-shrink:0;min-width:14px;text-align:right;}
+  .bracket-connector{display:flex;align-items:center;}
+  .bracket-line-wrap{display:flex;flex-direction:column;justify-content:space-between;}
+  .bracket-line{width:14px;height:1px;background:#334155;}
+  .bracket-vline{width:1px;background:#334155;}
+
   .theme-btn{width:38px;height:38px;border-radius:10px;background:#1e293b;border:1px solid #334155;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background .3s;}
   body.light .theme-btn{background:#e2e8f0;border-color:#cbd5e1;}
 
@@ -130,17 +160,6 @@
     </div>
   </div>
 
-  <!-- TEAMS VIEW -->
-  <div id="view-teams" class="view px-4 pt-5">
-    <div class="flex items-center justify-between mb-4">
-      <h2 style="font-weight:800;font-size:15px;">Teams & Squads</h2>
-      <span id="team-count" style="font-size:11px;color:#64748b;"></span>
-    </div>
-    <div id="teams-container" class="pb-4">
-      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
-    </div>
-  </div>
-
   <!-- STANDINGS VIEW -->
   <div id="view-standings" class="view px-4 pt-5">
     <div class="flex items-center justify-between mb-4">
@@ -152,26 +171,50 @@
     </div>
   </div>
 
-  <!-- SEARCH VIEW -->
-  <div id="view-search" class="view px-4 pt-5">
+  <!-- TEAMS VIEW -->
+  <div id="view-teams" class="view px-4 pt-5">
     <div class="flex items-center justify-between mb-4">
-      <h2 style="font-weight:800;font-size:15px;">Search</h2>
+      <h2 style="font-weight:800;font-size:15px;">Teams & Squads</h2>
+      <span id="team-count" style="font-size:11px;color:#64748b;"></span>
     </div>
-    <div class="search-box">
+    <div class="search-box" style="margin-bottom:14px;">
       <svg width="16" height="16" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input id="search-input" type="text" placeholder="Search players or teams..." oninput="renderSearch()" autocomplete="off">
-      <button onclick="document.getElementById('search-input').value='';renderSearch();" style="background:none;border:none;color:#475569;cursor:pointer;font-size:16px;">✕</button>
+      <input id="team-search-input" type="text" placeholder="Search teams or players..." oninput="renderTeamsSearch()" autocomplete="off">
+      <button onclick="document.getElementById('team-search-input').value='';renderTeamsSearch();" style="background:none;border:none;color:#475569;cursor:pointer;font-size:16px;">✕</button>
     </div>
-    <div id="search-results" class="pb-4"></div>
+    <div id="team-search-results" style="display:none;" class="mb-4 pb-2"></div>
+    <div id="teams-container" class="pb-4">
+      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
+    </div>
   </div>
 
-  <!-- STATS VIEW -->
-  <div id="view-stats" class="view px-4 pt-5">
+  <!-- AWARDS VIEW -->
+  <div id="view-awards" class="view px-4 pt-5">
     <div class="flex items-center justify-between mb-4">
-      <h2 style="font-weight:800;font-size:15px;">Player Stats</h2>
+      <h2 style="font-weight:800;font-size:15px;">Awards</h2>
+      <span style="font-size:11px;color:#64748b;">Live Rankings</span>
     </div>
-    <div id="stats-container" class="pb-4">
-      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
+    <!-- Award sub-tabs -->
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:20px;" id="award-tabs">
+      <button class="award-tab active" id="awdtab-boot" onclick="switchAwardTab('boot')">🥇 Golden Boot</button>
+      <button class="award-tab" id="awdtab-glove" onclick="switchAwardTab('glove')">🧤 Golden Glove</button>
+      <button class="award-tab" id="awdtab-assist" onclick="switchAwardTab('assist')">🎯 Most Assists</button>
+      <button class="award-tab" id="awdtab-cards" onclick="switchAwardTab('cards')">🟨 Discipline</button>
+    </div>
+    <div id="awards-container" class="pb-4"></div>
+  </div>
+
+  <!-- BRACKET VIEW -->
+  <div id="view-bracket" class="view pt-5">
+    <div class="px-4 flex items-center justify-between mb-4">
+      <h2 style="font-weight:800;font-size:15px;">Knockout Bracket</h2>
+      <span style="font-size:11px;color:#64748b;">R32 → Final</span>
+    </div>
+    <p style="font-size:11px;color:#64748b;padding:0 16px;margin-bottom:12px;">← Scroll horizontally →</p>
+    <div class="bracket-scroll px-4">
+      <div id="bracket-container" class="bracket-wrap">
+        <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
+      </div>
     </div>
   </div>
 
@@ -191,13 +234,13 @@
     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
     <span>Teams</span>
   </button>
-  <button class="nav-btn" id="nav-search" onclick="switchView('search')">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <span>Search</span>
+  <button class="nav-btn" id="nav-awards" onclick="switchView('awards')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+    <span>Awards</span>
   </button>
-  <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-    <span>Stats</span>
+  <button class="nav-btn" id="nav-bracket" onclick="switchView('bracket')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <span>Bracket</span>
   </button>
 </nav>
 
@@ -342,8 +385,7 @@ function toggleTheme() {
   localStorage.setItem('wc26_theme', isLight ? 'light' : 'dark');
 }
 function initTheme() {
-  const saved = localStorage.getItem('wc26_theme');
-  if (saved === 'light') {
+  if (localStorage.getItem('wc26_theme') === 'light') {
     document.body.classList.add('light');
     document.getElementById('theme-btn').textContent = '☀️';
   }
@@ -369,7 +411,8 @@ async function loadData() {
   renderFixtures();
   renderTeams();
   renderStandings();
-  renderStats();
+  renderAwards('boot');
+  renderBracket();
 }
 
 function allFixtures() { return [...DB.fixtures, ...SESSION.fixtures]; }
@@ -387,8 +430,8 @@ function switchView(v) {
   if (v === 'fixtures')  renderFixtures();
   if (v === 'teams')     renderTeams();
   if (v === 'standings') renderStandings();
-  if (v === 'stats')     renderStats();
-  if (v === 'search')    { renderSearch(); setTimeout(()=>document.getElementById('search-input').focus(),200); }
+  if (v === 'awards')    renderAwards(currentAwardTab);
+  if (v === 'bracket')   renderBracket();
 }
 
 // ─────────────────────────────────────────
@@ -447,7 +490,7 @@ function renderFixtures() {
 function setFilter(f) { activeFilter = f; renderFixtures(); }
 
 // ─────────────────────────────────────────
-//  TEAMS
+//  TEAMS + SEARCH
 // ─────────────────────────────────────────
 function renderTeams() {
   const teams = allTeams();
@@ -475,6 +518,57 @@ function renderTeams() {
     </div>`).join('');
 }
 
+function renderTeamsSearch() {
+  const q = document.getElementById('team-search-input').value.trim().toLowerCase();
+  const resultsEl = document.getElementById('team-search-results');
+  const teamsEl   = document.getElementById('teams-container');
+  if (!q) { resultsEl.style.display='none'; teamsEl.style.display='block'; return; }
+  resultsEl.style.display='block'; teamsEl.style.display='none';
+
+  const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
+  const matchedTeams   = allTeams().filter(t => t.name.toLowerCase().includes(q));
+  const matchedPlayers = allPlayers().filter(p => p.name.toLowerCase().includes(q) || (p.club||'').toLowerCase().includes(q));
+
+  let html = '';
+  if (matchedTeams.length) {
+    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:10px;">🌍 TEAMS</p>`;
+    html += `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">`;
+    html += matchedTeams.map(t => `
+      <div class="card" style="padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openSquad('${t.id}')">
+        <span style="font-size:26px;">${t.flag||'🏳️'}</span>
+        <div>
+          <p style="font-size:14px;font-weight:700;">${t.name}</p>
+          <p style="font-size:11px;color:#64748b;">Group ${t.group||'?'} · ${t.manager||'TBC'}</p>
+        </div>
+        <svg style="margin-left:auto;" width="14" height="14" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>`).join('');
+    html += `</div>`;
+  }
+  if (matchedPlayers.length) {
+    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:10px;">👤 PLAYERS</p>`;
+    html += `<div class="card" style="padding:4px 12px;">`;
+    html += matchedPlayers.slice(0,30).map(p => {
+      const team = allTeams().find(t => t.id === p.team) || {};
+      return `
+        <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
+          <span style="font-size:20px;">${team.flag||'🏳️'}</span>
+          <div style="flex:1;min-width:0;">
+            <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+            <p style="font-size:11px;color:#64748b;">${p.club||'—'} · ${team.name||p.team}</p>
+          </div>
+          <span style="font-size:11px;font-weight:700;color:${posColor[p.pos]||'#94a3b8'};">${p.pos}</span>
+          <svg width="14" height="14" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>`;
+    }).join('');
+    html += `</div>`;
+    if (matchedPlayers.length > 30) html += `<p style="font-size:12px;color:#64748b;text-align:center;margin-top:8px;">Showing 30 of ${matchedPlayers.length}</p>`;
+  }
+  if (!matchedTeams.length && !matchedPlayers.length) {
+    html = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">😔</div><p style="margin-top:8px;font-size:14px;">No results for "${q}"</p></div>`;
+  }
+  resultsEl.innerHTML = html;
+}
+
 // ─────────────────────────────────────────
 //  STANDINGS
 // ─────────────────────────────────────────
@@ -482,37 +576,23 @@ function renderStandings() {
   const container = document.getElementById('standings-container');
   const teams = allTeams();
   const fixtures = allFixtures().filter(f => f.stage === 'Group Stage' && f.g1 != null && f.g2 != null);
-
-  if (!teams.length) {
-    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">🏆</div><p style="margin-top:8px;font-size:14px;">No data yet.</p></div>`;
-    return;
-  }
-
-  // Build stats per team
+  if (!teams.length) { container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">🏆</div><p style="margin-top:8px;font-size:14px;">No data yet.</p></div>`; return; }
   const stats = {};
-  teams.forEach(t => {
-    stats[t.id] = { id:t.id, mp:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 };
-  });
-
+  teams.forEach(t => { stats[t.id] = { id:t.id, mp:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 }; });
   fixtures.forEach(f => {
-    const t1 = f.t1, t2 = f.t2;
-    const g1 = f.g1, g2 = f.g2;
-    if (!stats[t1] || !stats[t2]) return;
+    const t1=f.t1, t2=f.t2, g1=f.g1, g2=f.g2;
+    if (!stats[t1]||!stats[t2]) return;
     stats[t1].mp++; stats[t2].mp++;
-    stats[t1].gf += g1; stats[t1].ga += g2;
-    stats[t2].gf += g2; stats[t2].ga += g1;
-    if (g1 > g2)      { stats[t1].w++; stats[t1].pts+=3; stats[t2].l++; }
-    else if (g1 < g2) { stats[t2].w++; stats[t2].pts+=3; stats[t1].l++; }
-    else              { stats[t1].d++; stats[t1].pts+=1; stats[t2].d++; stats[t2].pts+=1; }
+    stats[t1].gf+=g1; stats[t1].ga+=g2;
+    stats[t2].gf+=g2; stats[t2].ga+=g1;
+    if (g1>g2)      { stats[t1].w++; stats[t1].pts+=3; stats[t2].l++; }
+    else if (g1<g2) { stats[t2].w++; stats[t2].pts+=3; stats[t1].l++; }
+    else            { stats[t1].d++; stats[t1].pts++; stats[t2].d++; stats[t2].pts++; }
   });
-
   const byGroup = {};
-  teams.forEach(t => { const g = t.group||'?'; (byGroup[g]=byGroup[g]||[]).push(t); });
-
+  teams.forEach(t => { const g=t.group||'?'; (byGroup[g]=byGroup[g]||[]).push(t); });
   container.innerHTML = Object.keys(byGroup).sort().map(g => {
-    const rows = byGroup[g].map(t => ({ ...t, ...stats[t.id] }))
-      .sort((a,b) => b.pts-a.pts || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf);
-
+    const rows = byGroup[g].map(t => ({...t,...stats[t.id]})).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);
     return `
       <div style="margin-bottom:20px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
@@ -521,29 +601,13 @@ function renderStandings() {
         </div>
         <div class="card" style="padding:10px 12px;overflow-x:auto;">
           <table class="standings-table">
-            <thead>
-              <tr>
-                <th style="text-align:left;width:40%;">Team</th>
-                <th>MP</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th style="color:#eab308;">Pts</th>
-              </tr>
-            </thead>
+            <thead><tr><th style="text-align:left;width:40%;">Team</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th style="color:#eab308;">Pts</th></tr></thead>
             <tbody>
-              ${rows.map((t,i) => `
+              ${rows.map((t,i)=>`
                 <tr class="standings-row" onclick="openSquad('${t.id}')" style="cursor:pointer;">
-                  <td>
-                    <div style="display:flex;align-items:center;gap:6px;">
-                      <span style="font-size:10px;color:#475569;width:14px;">${i+1}</span>
-                      <span style="font-size:16px;">${t.flag||'🏳️'}</span>
-                      <span style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${t.name}</span>
-                    </div>
-                  </td>
-                  <td>${t.mp||0}</td>
-                  <td>${t.w||0}</td>
-                  <td>${t.d||0}</td>
-                  <td>${t.l||0}</td>
-                  <td>${t.gf||0}</td>
-                  <td>${t.ga||0}</td>
-                  <td>${(t.gf||0)-(t.ga||0)}</td>
+                  <td><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:#475569;width:14px;">${i+1}</span><span style="font-size:16px;">${t.flag||'🏳️'}</span><span style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${t.name}</span></div></td>
+                  <td>${t.mp||0}</td><td>${t.w||0}</td><td>${t.d||0}</td><td>${t.l||0}</td>
+                  <td>${t.gf||0}</td><td>${t.ga||0}</td><td>${(t.gf||0)-(t.ga||0)}</td>
                   <td style="color:#eab308;font-weight:900;">${t.pts||0}</td>
                 </tr>`).join('')}
             </tbody>
@@ -554,59 +618,358 @@ function renderStandings() {
 }
 
 // ─────────────────────────────────────────
-//  SEARCH
+//  AWARDS
 // ─────────────────────────────────────────
-function renderSearch() {
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const container = document.getElementById('search-results');
-  if (!q) {
-    container.innerHTML = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">🔍</div><p style="margin-top:8px;font-size:14px;">Search for players or teams</p></div>`;
+let currentAwardTab = 'boot';
+
+function switchAwardTab(tab) {
+  currentAwardTab = tab;
+  document.querySelectorAll('.award-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('awdtab-' + tab).classList.add('active');
+  renderAwards(tab);
+}
+
+function renderAwards(tab) {
+  const container = document.getElementById('awards-container');
+  const players   = allPlayers();
+  const teams     = allTeams();
+  const getFlag   = id => teams.find(t=>t.id===id)?.flag||'🏳️';
+  const getTeam   = id => teams.find(t=>t.id===id)?.name||id;
+
+  if (!players.length) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📊</div><p style="margin-top:8px;font-size:14px;">No player data yet.</p></div>`;
     return;
   }
-  const matchedTeams = allTeams().filter(t => t.name.toLowerCase().includes(q));
-  const matchedPlayers = allPlayers().filter(p => p.name.toLowerCase().includes(q) || (p.club||'').toLowerCase().includes(q));
+
+  if (tab === 'boot') {
+    const sorted = [...players].filter(p=>p.goals>0).sort((a,b)=>b.goals-a.goals||b.assists-a.assists);
+    const top3   = sorted.slice(0,3);
+    const rest   = sorted.slice(3,15);
+
+    let html = `<div style="text-align:center;margin-bottom:20px;"><div style="font-size:32px;">🥇</div><p style="font-size:13px;font-weight:700;margin-top:4px;">Golden Boot</p><p style="font-size:11px;color:#64748b;">Top scorers of the tournament</p></div>`;
+
+    // Podium top 3
+    if (top3.length) {
+      const order = top3.length >= 3 ? [1,0,2] : top3.length === 2 ? [0,1] : [0];
+      const podiumColors = ['podium-1','podium-2','podium-3'];
+      const rankColors   = ['rank-1','rank-2','rank-3'];
+      const heights      = ['pt-4','pt-8','pt-8'];
+      html += `<div style="display:grid;grid-template-columns:repeat(${Math.min(top3.length,3)},1fr);gap:8px;margin-bottom:20px;align-items:end;">`;
+      order.slice(0,top3.length).forEach(idx => {
+        if (idx >= top3.length) return;
+        const p = top3[idx];
+        html += `
+          <div class="podium-card ${podiumColors[idx]}" onclick="openPlayerModal(${p.id},'${p.team}')" style="cursor:pointer;${idx===0?'order:-1':''}">
+            <div class="rank-badge ${rankColors[idx]}">${idx+1}</div>
+            <div style="font-size:28px;margin:8px 0 4px;">${getFlag(p.team)}</div>
+            <p style="font-size:12px;font-weight:900;line-height:1.2;">${p.name}</p>
+            <p style="font-size:10px;color:#64748b;margin-top:2px;">${getTeam(p.team)}</p>
+            <div style="margin-top:10px;font-size:26px;font-weight:900;color:#eab308;">${p.goals}</div>
+            <p style="font-size:10px;color:#64748b;">goals</p>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Rest of list
+    if (rest.length) {
+      html += `<div class="card" style="padding:4px 12px;">`;
+      rest.forEach((p,i) => {
+        html += `
+          <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
+            <span style="font-size:12px;font-weight:700;color:#475569;width:22px;">${i+4}</span>
+            <span style="font-size:20px;">${getFlag(p.team)}</span>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+              <p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p>
+            </div>
+            <span style="font-size:18px;font-weight:900;color:#eab308;">${p.goals}</span>
+            <span style="font-size:11px;color:#64748b;">goals</span>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (!top3.length) html += `<div style="text-align:center;padding:20px;color:#475569;font-size:13px;">No goals recorded yet.</div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  if (tab === 'glove') {
+    // Auto-calculate clean sheets from fixtures
+    const completedGS = allFixtures().filter(f => f.stage === 'Group Stage' && f.g1 != null && f.g2 != null);
+    const csMap = {}; // teamId -> clean sheets
+    completedGS.forEach(f => {
+      if (!csMap[f.t1]) csMap[f.t1]=0;
+      if (!csMap[f.t2]) csMap[f.t2]=0;
+      if (f.g2 === 0) csMap[f.t1]++;
+      if (f.g1 === 0) csMap[f.t2]++;
+    });
+
+    // Also check knockout fixtures
+    const completedKO = allFixtures().filter(f => f.stage !== 'Group Stage' && f.g1 != null && f.g2 != null);
+    completedKO.forEach(f => {
+      if (!csMap[f.t1]) csMap[f.t1]=0;
+      if (!csMap[f.t2]) csMap[f.t2]=0;
+      if (f.g2 === 0) csMap[f.t1]++;
+      if (f.g1 === 0) csMap[f.t2]++;
+    });
+
+    // Get GKs and attach their team's clean sheets
+    const gks = players.filter(p => p.pos === 'GK' && p.played > 0).map(p => ({
+      ...p,
+      cs: csMap[p.team] || 0,
+    })).sort((a,b) => b.cs-a.cs || b.played-a.played);
+
+    let html = `<div style="text-align:center;margin-bottom:20px;"><div style="font-size:32px;">🧤</div><p style="font-size:13px;font-weight:700;margin-top:4px;">Golden Glove</p><p style="font-size:11px;color:#64748b;">Best GK by clean sheets · auto-calculated from results</p></div>`;
+
+    if (!gks.length) { html += `<div style="text-align:center;padding:20px;color:#475569;font-size:13px;">No GK data yet. Make sure goalkeepers have Played > 0.</div>`; container.innerHTML=html; return; }
+
+    const top3 = gks.slice(0,3);
+    const rest  = gks.slice(3,12);
+    const podiumColors = ['podium-1','podium-2','podium-3'];
+    const rankColors   = ['rank-1','rank-2','rank-3'];
+    const order = top3.length >= 3 ? [1,0,2] : top3.length === 2 ? [0,1] : [0];
+
+    html += `<div style="display:grid;grid-template-columns:repeat(${Math.min(top3.length,3)},1fr);gap:8px;margin-bottom:20px;align-items:end;">`;
+    order.slice(0,top3.length).forEach(idx => {
+      if (idx >= top3.length) return;
+      const p = top3[idx];
+      html += `
+        <div class="podium-card ${podiumColors[idx]}" onclick="openPlayerModal(${p.id},'${p.team}')" style="cursor:pointer;">
+          <div class="rank-badge ${rankColors[idx]}">${idx+1}</div>
+          <div style="font-size:28px;margin:8px 0 4px;">${getFlag(p.team)}</div>
+          <p style="font-size:12px;font-weight:900;line-height:1.2;">${p.name}</p>
+          <p style="font-size:10px;color:#64748b;margin-top:2px;">${getTeam(p.team)}</p>
+          <div style="margin-top:10px;font-size:26px;font-weight:900;color:#2dd4bf;">${p.cs}</div>
+          <p style="font-size:10px;color:#64748b;">clean sheets</p>
+          <p style="font-size:10px;color:#475569;margin-top:2px;">${p.played} played</p>
+        </div>`;
+    });
+    html += `</div>`;
+
+    if (rest.length) {
+      html += `<div class="card" style="padding:4px 12px;">`;
+      rest.forEach((p,i) => {
+        html += `
+          <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
+            <span style="font-size:12px;font-weight:700;color:#475569;width:22px;">${i+4}</span>
+            <span style="font-size:20px;">${getFlag(p.team)}</span>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+              <p style="font-size:11px;color:#64748b;">${getTeam(p.team)} · ${p.played} played</p>
+            </div>
+            <span style="font-size:18px;font-weight:900;color:#2dd4bf;">${p.cs}</span>
+            <span style="font-size:11px;color:#64748b;">CS</span>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+    container.innerHTML = html;
+    return;
+  }
+
+  if (tab === 'assist') {
+    const sorted = [...players].filter(p=>p.assists>0).sort((a,b)=>b.assists-a.assists||b.goals-a.goals);
+    const top3   = sorted.slice(0,3);
+    const rest   = sorted.slice(3,12);
+
+    let html = `<div style="text-align:center;margin-bottom:20px;"><div style="font-size:32px;">🎯</div><p style="font-size:13px;font-weight:700;margin-top:4px;">Most Assists</p><p style="font-size:11px;color:#64748b;">Top playmakers of the tournament</p></div>`;
+
+    if (top3.length) {
+      const order = top3.length >= 3 ? [1,0,2] : top3.length === 2 ? [0,1] : [0];
+      html += `<div style="display:grid;grid-template-columns:repeat(${Math.min(top3.length,3)},1fr);gap:8px;margin-bottom:20px;align-items:end;">`;
+      ['podium-1','podium-2','podium-3'].slice(0,top3.length);
+      order.slice(0,top3.length).forEach(idx => {
+        if (idx >= top3.length) return;
+        const p = top3[idx];
+        html += `
+          <div class="podium-card ${['podium-1','podium-2','podium-3'][idx]}" onclick="openPlayerModal(${p.id},'${p.team}')" style="cursor:pointer;">
+            <div class="rank-badge ${['rank-1','rank-2','rank-3'][idx]}">${idx+1}</div>
+            <div style="font-size:28px;margin:8px 0 4px;">${getFlag(p.team)}</div>
+            <p style="font-size:12px;font-weight:900;line-height:1.2;">${p.name}</p>
+            <p style="font-size:10px;color:#64748b;margin-top:2px;">${getTeam(p.team)}</p>
+            <div style="margin-top:10px;font-size:26px;font-weight:900;color:#2dd4bf;">${p.assists}</div>
+            <p style="font-size:10px;color:#64748b;">assists</p>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+    if (rest.length) {
+      html += `<div class="card" style="padding:4px 12px;">`;
+      rest.forEach((p,i) => {
+        html += `
+          <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
+            <span style="font-size:12px;font-weight:700;color:#475569;width:22px;">${i+4}</span>
+            <span style="font-size:20px;">${getFlag(p.team)}</span>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+              <p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p>
+            </div>
+            <span style="font-size:18px;font-weight:900;color:#2dd4bf;">${p.assists}</span>
+            <span style="font-size:11px;color:#64748b;">ast</span>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+    if (!top3.length) html += `<div style="text-align:center;padding:20px;color:#475569;font-size:13px;">No assists recorded yet.</div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  if (tab === 'cards') {
+    // Most yellow cards
+    const yellows = [...players].filter(p=>p.yc>0).sort((a,b)=>b.yc-a.yc||b.rc-a.rc).slice(0,10);
+    // Red cards
+    const reds = [...players].filter(p=>p.rc>0).sort((a,b)=>b.rc-a.rc).slice(0,5);
+
+    let html = `<div style="text-align:center;margin-bottom:20px;"><div style="font-size:32px;">🟨</div><p style="font-size:13px;font-weight:700;margin-top:4px;">Discipline Board</p><p style="font-size:11px;color:#64748b;">Cards received in the tournament</p></div>`;
+
+    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#fbbf24;margin-bottom:10px;">🟨 YELLOW CARDS</p>`;
+    if (yellows.length) {
+      html += `<div class="card" style="padding:4px 12px;margin-bottom:20px;">`;
+      yellows.forEach((p,i) => {
+        html += `
+          <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
+            <span style="font-size:12px;font-weight:700;color:#475569;width:22px;">${i+1}</span>
+            <span style="font-size:20px;">${getFlag(p.team)}</span>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+              <p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p>
+            </div>
+            <span style="font-size:18px;font-weight:900;color:#fbbf24;">${p.yc}</span>
+            <span style="font-size:16px;">🟨</span>
+          </div>`;
+      });
+      html += `</div>`;
+    } else { html += `<p style="color:#475569;font-size:13px;margin-bottom:20px;">No yellows yet.</p>`; }
+
+    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#ef4444;margin-bottom:10px;">🟥 RED CARDS</p>`;
+    if (reds.length) {
+      html += `<div class="card" style="padding:4px 12px;">`;
+      reds.forEach((p,i) => {
+        html += `
+          <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
+            <span style="font-size:12px;font-weight:700;color:#475569;width:22px;">${i+1}</span>
+            <span style="font-size:20px;">${getFlag(p.team)}</span>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+              <p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p>
+            </div>
+            <span style="font-size:18px;font-weight:900;color:#ef4444;">${p.rc}</span>
+            <span style="font-size:16px;">🟥</span>
+          </div>`;
+      });
+      html += `</div>`;
+    } else { html += `<p style="color:#475569;font-size:13px;">No red cards yet.</p>`; }
+    container.innerHTML = html;
+  }
+}
+
+// ─────────────────────────────────────────
+//  KNOCKOUT BRACKET
+// ─────────────────────────────────────────
+function renderBracket() {
+  const container = document.getElementById('bracket-container');
+  const stageOrder = ['Round of 32','Round of 16','Quarter-Final','Semi-Final','3rd Place','Final'];
+  const stageLabel = { 'Round of 32':'Round of 32','Round of 16':'Round of 16','Quarter-Final':'Quarter-Finals','Semi-Final':'Semi-Finals','3rd Place':'3rd Place','Final':'🏆 Final' };
+
+  const allF = allFixtures();
+  const koFixtures = allF.filter(f => stageOrder.includes(f.stage));
+
+  if (!koFixtures.length) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 20px;color:#475569;min-width:300px;"><div style="font-size:40px;">🏆</div><p style="margin-top:8px;font-size:14px;">No knockout fixtures yet.</p><p style="font-size:12px;margin-top:4px;">Add them via the admin panel with stage = "Round of 32" etc.</p></div>`;
+    return;
+  }
+
+  const byStage = {};
+  stageOrder.forEach(s => { byStage[s] = koFixtures.filter(f => f.stage === s); });
+
+  const getTeamObj = id => allTeams().find(t => t.id === id || t.name === id) || { name: id||'TBD', flag:'🏳️' };
 
   let html = '';
+  const activeStagesa = stageOrder.filter(s => byStage[s].length > 0);
 
-  if (matchedTeams.length) {
-    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:10px;">🌍 TEAMS</p>`;
-    html += `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">`;
-    html += matchedTeams.map(t => `
-      <div class="card" style="padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openSquad('${t.id}')">
-        <span style="font-size:28px;">${t.flag||'🏳️'}</span>
-        <div>
-          <p style="font-size:14px;font-weight:700;">${t.name}</p>
-          <p style="font-size:11px;color:#64748b;">Group ${t.group||'?'} · ${t.manager||'Manager TBC'}</p>
-        </div>
-      </div>`).join('');
-    html += `</div>`;
-  }
+  activeStagesa.forEach(stage => {
+    const matches = byStage[stage];
+    // Calc spacing: each match needs height, gap between pairs
+    const matchH = 66; // px per match card
+    const gap    = 12;
+    const totalH  = matches.length * (matchH + gap);
 
-  if (matchedPlayers.length) {
-    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:10px;">👤 PLAYERS</p>`;
-    html += `<div class="card" style="padding:4px 12px;">`;
-    const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
-    html += matchedPlayers.slice(0,30).map(p => {
-      const team = allTeams().find(t => t.id === p.team) || {};
-      return `
-        <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${p.team}')">
-          <span style="font-size:20px;">${team.flag||'🏳️'}</span>
-          <div style="flex:1;min-width:0;">
-            <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
-            <p style="font-size:11px;color:#64748b;">${p.club||'—'} · ${team.name||p.team}</p>
+    html += `<div class="bracket-round" style="min-height:${Math.max(totalH,100)}px;">`;
+    html += `<div class="bracket-round-label">${stageLabel[stage]||stage}</div>`;
+    html += `<div style="display:flex;flex-direction:column;gap:${gap}px;">`;
+
+    matches.forEach(f => {
+      const t1 = getTeamObj(f.t1);
+      const t2 = getTeamObj(f.t2);
+      const played = f.g1 != null && f.g2 != null;
+      const w1 = played && f.g1 > f.g2;
+      const w2 = played && f.g2 > f.g1;
+
+      html += `
+        <div class="bracket-match" style="width:130px;" onclick="openBracketMatch(${f.id||0})">
+          <div class="bracket-team${w1?' winner':''}">
+            <span class="bracket-flag">${t1.flag||'🏳️'}</span>
+            <span class="bracket-name">${t1.name||'TBD'}</span>
+            <span class="bracket-score">${played?f.g1:''}</span>
           </div>
-          <span style="font-size:11px;font-weight:700;color:${posColor[p.pos]||'#94a3b8'};">${p.pos}</span>
+          <div class="bracket-team${w2?' winner':''}">
+            <span class="bracket-flag">${t2.flag||'🏳️'}</span>
+            <span class="bracket-name">${t2.name||'TBD'}</span>
+            <span class="bracket-score">${played?f.g2:''}</span>
+          </div>
         </div>`;
-    }).join('');
-    html += `</div>`;
-    if (matchedPlayers.length > 30) html += `<p style="font-size:12px;color:#64748b;text-align:center;margin-top:10px;">Showing 30 of ${matchedPlayers.length} results</p>`;
-  }
+    });
 
-  if (!matchedTeams.length && !matchedPlayers.length) {
-    html = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">😔</div><p style="margin-top:8px;font-size:14px;">No results for "${q}"</p></div>`;
-  }
+    html += `</div></div>`;
 
-  container.innerHTML = html;
+    // Connector lines between rounds (skip after last)
+    if (stage !== activeStagesa[activeStagesa.length-1]) {
+      html += `<div style="display:flex;flex-direction:column;justify-content:space-around;padding:${matchH/2+gap}px 0;gap:${(matchH+gap)}px;min-height:${Math.max(totalH,100)}px;">`;
+      for(let i=0;i<Math.max(1,Math.ceil(matches.length/2));i++){
+        html += `<div style="display:flex;align-items:center;"><div style="width:8px;height:1px;background:#334155;"></div></div>`;
+      }
+      html += `</div>`;
+    }
+  });
+
+  container.innerHTML = html || `<div style="padding:40px;color:#475569;">No knockout data yet.</div>`;
+}
+
+function openBracketMatch(id) {
+  // Find fixture and show a quick info modal
+  const f = allFixtures().find(x => x.id == id);
+  if (!f) return;
+  const t1 = allTeams().find(t=>t.id===f.t1||t.name===f.t1)||{name:f.t1||'TBD',flag:'🏳️'};
+  const t2 = allTeams().find(t=>t.id===f.t2||t.name===f.t2)||{name:f.t2||'TBD',flag:'🏳️'};
+  const played = f.g1!=null && f.g2!=null;
+  document.getElementById('player-modal-box').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <p style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#2dd4bf;">${f.stage}</p>
+        <p style="font-size:13px;font-weight:700;color:#64748b;margin-top:2px;">${f.date||''} ${f.time?'· '+f.time:''}</p>
+      </div>
+      <button onclick="closeModal('player-modal')" style="width:32px;height:32px;border-radius:999px;background:#0f172a;border:none;color:#94a3b8;font-size:16px;cursor:pointer;">×</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;text-align:center;">
+        <div style="font-size:40px;">${t1.flag}</div>
+        <p style="font-size:13px;font-weight:900;margin-top:4px;">${t1.name}</p>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#eab308;letter-spacing:4px;">${played?f.g1+' – '+f.g2:'vs'}</div>
+        <p style="font-size:10px;color:#475569;margin-top:2px;">${played?'Full Time':'Upcoming'}</p>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <div style="font-size:40px;">${t2.flag}</div>
+        <p style="font-size:13px;font-weight:900;margin-top:4px;">${t2.name}</p>
+      </div>
+    </div>
+    ${f.venue?`<div style="background:#0f172a;border-radius:10px;padding:10px 12px;text-align:center;"><p style="font-size:11px;color:#64748b;">📍 ${f.venue}</p></div>`:''}
+  `;
+  document.getElementById('player-modal').classList.add('open');
 }
 
 // ─────────────────────────────────────────
@@ -625,7 +988,7 @@ function openSquad(teamId) {
     if (!byPos[pos].length) return;
     html += `<div style="margin-bottom:18px;"><p style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${posColor[pos]};margin-bottom:6px;">${posLabel[pos]}</p>`;
     html += byPos[pos].map(p => `
-      <div class="player-row" onclick="openPlayerModal('${p.id}','${teamId}')">
+      <div class="player-row" onclick="openPlayerModal(${p.id},'${teamId}')">
         <div style="width:28px;height:28px;border-radius:999px;background:#1e293b;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <span style="font-size:11px;font-weight:700;color:#94a3b8;">${p.num||'?'}</span>
         </div>
@@ -659,7 +1022,7 @@ function openSquad(teamId) {
 //  PLAYER MODAL
 // ─────────────────────────────────────────
 function openPlayerModal(playerId, teamId) {
-  const p    = allPlayers().find(pl => (String(pl.id)||pl.name) === String(playerId) && String(pl.team) === String(teamId));
+  const p    = allPlayers().find(pl => String(pl.id) === String(playerId) && String(pl.team) === String(teamId));
   const team = allTeams().find(t => t.id === teamId);
   if (!p) return;
   const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
@@ -693,36 +1056,6 @@ function openPlayerModal(playerId, teamId) {
       <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#ef4444;">${p.rc||0}</p><p style="font-size:11px;color:#64748b;">Red 🟥</p></div>
     </div>`;
   document.getElementById('player-modal').classList.add('open');
-}
-
-// ─────────────────────────────────────────
-//  STATS
-// ─────────────────────────────────────────
-function renderStats() {
-  const players = allPlayers();
-  const container = document.getElementById('stats-container');
-  if (!players.length) { container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📊</div><p style="margin-top:8px;font-size:14px;">No player data yet.</p></div>`; return; }
-  const scorers   = [...players].filter(p=>p.goals>0).sort((a,b)=>b.goals-a.goals).slice(0,10);
-  const assisters = [...players].filter(p=>p.assists>0).sort((a,b)=>b.assists-a.assists).slice(0,5);
-  const getFlag = id => allTeams().find(t=>t.id===id)?.flag||'🏳️';
-  const getTeam = id => allTeams().find(t=>t.id===id)?.name||id;
-  const row = (p,i,stat,color,lbl) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;" onclick="openPlayerModal('${p.id}','${p.team}')">
-      <span style="font-size:12px;font-weight:700;color:#475569;width:18px;">${i+1}</span>
-      <span style="font-size:20px;">${getFlag(p.team)}</span>
-      <div style="flex:1;"><p style="font-size:13px;font-weight:700;">${p.name}</p><p style="font-size:11px;color:#64748b;">${getTeam(p.team)}</p></div>
-      <span style="font-size:18px;font-weight:900;color:${color};">${p[stat]||0}</span>
-      <span style="font-size:11px;color:#64748b;">${lbl}</span>
-    </div>`;
-  container.innerHTML = `
-    <div style="margin-bottom:24px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:12px;">⚽ TOP SCORERS</p>
-      <div class="card" style="padding:4px 12px;">${scorers.length?scorers.map((p,i)=>row(p,i,'goals','#eab308','goals')).join(''):'<p style="color:#475569;font-size:13px;padding:12px 0;">No goals recorded yet.</p>'}</div>
-    </div>
-    <div>
-      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:12px;">🎯 TOP ASSISTS</p>
-      <div class="card" style="padding:4px 12px;">${assisters.length?assisters.map((p,i)=>row(p,i,'assists','#2dd4bf','ast')).join(''):'<p style="color:#475569;font-size:13px;padding:12px 0;">No assists recorded yet.</p>'}</div>
-    </div>`;
 }
 
 // ─────────────────────────────────────────
@@ -771,9 +1104,8 @@ function populateTeamDropdowns(...ids) {
   ids.forEach(id => { document.getElementById(id).innerHTML = opts; });
 }
 function addFixture() {
-  const t1id = document.getElementById('f-t1').value;
-  const t2id = document.getElementById('f-t2').value;
-  if (!t1id || !t2id) { alert('Select both teams.'); return; }
+  const t1id=document.getElementById('f-t1').value, t2id=document.getElementById('f-t2').value;
+  if (!t1id||!t2id) { alert('Select both teams.'); return; }
   const f = { id:Date.now(), t1:t1id, t2:t2id, g1:document.getElementById('f-g1').value!==''?parseInt(document.getElementById('f-g1').value):null, g2:document.getElementById('f-g2').value!==''?parseInt(document.getElementById('f-g2').value):null, stage:document.getElementById('f-stage').value, group:document.getElementById('f-group').value.trim().toUpperCase(), date:document.getElementById('f-date').value, time:document.getElementById('f-time').value.trim(), venue:document.getElementById('f-venue').value.trim() };
   SESSION.fixtures.push(f);
   ['f-g1','f-g2','f-group','f-time','f-venue','f-date'].forEach(id=>document.getElementById(id).value='');
@@ -781,43 +1113,33 @@ function addFixture() {
   alert('Fixture added ✓');
 }
 function renderAdminFixtures() {
-  const list = SESSION.fixtures;
-  const el = document.getElementById('admin-fixtures-list');
-  const box = document.getElementById('export-fixtures-box');
+  const list=SESSION.fixtures, el=document.getElementById('admin-fixtures-list'), box=document.getElementById('export-fixtures-box');
   if (!list.length) { el.innerHTML='<p style="color:#475569;font-size:13px;">Nothing added this session.</p>'; box.style.display='none'; return; }
-  const teams = allTeams();
-  el.innerHTML = list.slice().reverse().map(f => {
-    const t1 = teams.find(t=>t.id===f.t1)||{name:f.t1};
-    const t2 = teams.find(t=>t.id===f.t2)||{name:f.t2};
-    return `<div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;"><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:700;">${t1.flag||''} ${t1.name} vs ${t2.flag||''} ${t2.name}</p><p style="font-size:11px;color:#64748b;">${f.date||''} · ${f.stage}</p></div><button class="btn-red" onclick="removeSession('fixtures',${f.id})">Del</button></div>`;
-  }).join('');
+  const teams=allTeams();
+  el.innerHTML=list.slice().reverse().map(f=>{const t1=teams.find(t=>t.id===f.t1)||{name:f.t1},t2=teams.find(t=>t.id===f.t2)||{name:f.t2};return `<div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;"><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:700;">${t1.flag||''} ${t1.name} vs ${t2.flag||''} ${t2.name}</p><p style="font-size:11px;color:#64748b;">${f.date||''} · ${f.stage}</p></div><button class="btn-red" onclick="removeSession('fixtures',${f.id})">Del</button></div>`;}).join('');
   box.style.display='block';
-  document.getElementById('fixtures-json-out').value = JSON.stringify(list, null, 2);
+  document.getElementById('fixtures-json-out').value=JSON.stringify(list,null,2);
 }
 function addPlayer() {
-  const teamId = document.getElementById('p-team').value;
-  const name = document.getElementById('p-name').value.trim();
-  if (!teamId || !name) { alert('Select a team and enter a name.'); return; }
+  const teamId=document.getElementById('p-team').value, name=document.getElementById('p-name').value.trim();
+  if (!teamId||!name) { alert('Select a team and enter a name.'); return; }
   const p = { id:Date.now(), team:teamId, name, num:document.getElementById('p-num').value.trim(), pos:document.getElementById('p-pos').value, age:document.getElementById('p-age').value.trim(), club:document.getElementById('p-club').value.trim(), goals:parseInt(document.getElementById('p-goals').value)||0, assists:parseInt(document.getElementById('p-assists').value)||0, played:parseInt(document.getElementById('p-played').value)||0, mins:parseInt(document.getElementById('p-mins').value)||0, yc:parseInt(document.getElementById('p-yc').value)||0, rc:parseInt(document.getElementById('p-rc').value)||0 };
   SESSION.players.push(p);
   ['p-name','p-num','p-age','p-club','p-goals','p-assists','p-played','p-mins','p-yc','p-rc'].forEach(id=>document.getElementById(id).value='');
-  renderAdminPlayers(); renderStats();
+  renderAdminPlayers(); renderAwards(currentAwardTab);
   alert('Player added ✓');
 }
 function renderAdminPlayers() {
-  const list = SESSION.players;
-  const teams = allTeams();
-  const el = document.getElementById('admin-players-list');
-  const box = document.getElementById('export-players-box');
+  const list=SESSION.players, teams=allTeams(), el=document.getElementById('admin-players-list'), box=document.getElementById('export-players-box');
   if (!list.length) { el.innerHTML='<p style="color:#475569;font-size:13px;">Nothing added this session.</p>'; box.style.display='none'; return; }
-  el.innerHTML = list.slice().reverse().map(p=>{ const team=teams.find(t=>t.id===p.team)||{}; return `<div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;"><span style="font-size:20px;">${team.flag||'🏳️'}</span><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:700;">#${p.num||'?'} ${p.name}</p><p style="font-size:11px;color:#64748b;">${p.pos} · ${team.name||p.team}</p></div><button class="btn-red" onclick="removeSession('players',${p.id})">Del</button></div>`; }).join('');
+  el.innerHTML=list.slice().reverse().map(p=>{const team=teams.find(t=>t.id===p.team)||{};return `<div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;"><span style="font-size:20px;">${team.flag||'🏳️'}</span><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:700;">#${p.num||'?'} ${p.name}</p><p style="font-size:11px;color:#64748b;">${p.pos} · ${team.name||p.team}</p></div><button class="btn-red" onclick="removeSession('players',${p.id})">Del</button></div>`;}).join('');
   box.style.display='block';
-  document.getElementById('players-json-out').value = JSON.stringify(list, null, 2);
+  document.getElementById('players-json-out').value=JSON.stringify(list,null,2);
 }
-function removeSession(type, id) {
-  SESSION[type] = SESSION[type].filter(x=>x.id!==id);
-  if (type==='fixtures') { renderAdminFixtures(); renderFixtures(); }
-  if (type==='players')  { renderAdminPlayers();  renderStats(); }
+function removeSession(type,id) {
+  SESSION[type]=SESSION[type].filter(x=>x.id!==id);
+  if (type==='fixtures') { renderAdminFixtures(); renderFixtures(); renderBracket(); }
+  if (type==='players')  { renderAdminPlayers(); renderAwards(currentAwardTab); }
 }
 function copyFixturesJSON() { navigator.clipboard.writeText(document.getElementById('fixtures-json-out').value).then(()=>alert('Copied!')); }
 function copyPlayersJSON()  { navigator.clipboard.writeText(document.getElementById('players-json-out').value).then(()=>alert('Copied!')); }
@@ -825,14 +1147,14 @@ function changePin() {
   const np=document.getElementById('new-pin').value, cp=document.getElementById('confirm-pin').value, msg=document.getElementById('pin-change-msg');
   if (!np) { msg.style.color='#ef4444'; msg.textContent='Enter a new PIN.'; return; }
   if (np!==cp) { msg.style.color='#ef4444'; msg.textContent='PINs do not match.'; return; }
-  localStorage.setItem('wc26_pin', np);
+  localStorage.setItem('wc26_pin',np);
   msg.style.color='#34d399'; msg.textContent='PIN updated ✓';
   document.getElementById('new-pin').value=''; document.getElementById('confirm-pin').value='';
 }
 function exportFullJSON() {
-  const full = { teams:DB.teams, fixtures:allFixtures(), players:allPlayers() };
-  const blob = new Blob([JSON.stringify(full,null,2)],{type:'application/json'});
-  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click();
+  const full={teams:DB.teams,fixtures:allFixtures(),players:allPlayers()};
+  const blob=new Blob([JSON.stringify(full,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click();
 }
 
 // ─────────────────────────────────────────
