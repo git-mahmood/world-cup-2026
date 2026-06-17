@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,20 +12,42 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  body{background:#0f172a;color:#f1f5f9;font-family:'Inter',sans-serif;}
+
+  /* ── DARK MODE (default) ── */
+  body{background:#0f172a;color:#f1f5f9;font-family:'Inter',sans-serif;transition:background .3s,color .3s;}
+  .card{background:#1e293b;border:1px solid rgba(255,255,255,0.07);border-radius:14px;transition:background .3s;}
+
+  /* ── LIGHT MODE ── */
+  body.light{background:#f1f5f9;color:#0f172a;}
+  body.light .card{background:#ffffff;border:1px solid rgba(0,0,0,0.08);}
+  body.light #bottom-nav{background:rgba(241,245,249,0.97);border-top:1px solid rgba(234,179,8,0.3);}
+  body.light .nav-btn svg,body.light .nav-btn span{color:#64748b;}
+  body.light .nav-btn.active svg,body.light .nav-btn.active span{color:#eab308;}
+  body.light header{background:#e2e8f0!important;border-bottom:1px solid rgba(0,0,0,0.06)!important;}
+  body.light .inp{background:#f8fafc;border-color:#cbd5e1;color:#0f172a;}
+  body.light .btn-ghost{border-color:#cbd5e1;color:#475569;}
+  body.light .overlay-sheet{background:#f1f5f9;}
+  body.light .modal-box{background:#ffffff;}
+  body.light #admin-panel{background:#f1f5f9;}
+  body.light .stat-cell{background:#f1f5f9;}
+  body.light .player-row{border-bottom:1px solid rgba(0,0,0,0.06);}
+  body.light .search-box{background:#ffffff;border:1px solid #cbd5e1;}
+  body.light .search-box input{background:transparent;color:#0f172a;}
+  body.light .standings-table th{color:#64748b;}
+  body.light .standings-row:hover{background:rgba(0,0,0,0.03);}
+
   #app{min-height:100vh;padding-bottom:80px;}
 
   #bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(15,23,42,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(234,179,8,0.15);display:flex;justify-content:space-around;padding:8px 0 12px;}
-  .nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 16px;cursor:pointer;border:none;background:none;}
+  .nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer;border:none;background:none;}
   .nav-btn svg{color:#475569;transition:color .2s;}
-  .nav-btn span{font-size:11px;font-weight:600;color:#475569;transition:color .2s;}
+  .nav-btn span{font-size:10px;font-weight:600;color:#475569;transition:color .2s;}
   .nav-btn.active svg,.nav-btn.active span{color:#eab308;}
 
   .view{display:none;}
   .view.active{display:block;animation:fadeUp .2s ease;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
-  .card{background:#1e293b;border:1px solid rgba(255,255,255,0.07);border-radius:14px;}
   .gold-line{height:2px;background:linear-gradient(90deg,#eab308,transparent);border-radius:2px;}
 
   .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s;display:flex;flex-direction:column;}
@@ -54,6 +75,25 @@
   .player-row:last-child{border:none;}
   .stat-cell{background:#0f172a;border-radius:10px;padding:10px;text-align:center;}
 
+  /* Search */
+  .search-box{display:flex;align-items:center;gap:8px;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:10px 14px;margin-bottom:16px;}
+  .search-box input{flex:1;background:transparent;border:none;outline:none;color:#f1f5f9;font-size:14px;}
+  .search-box input::placeholder{color:#475569;}
+
+  /* Standings */
+  .standings-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .standings-table th{color:#64748b;font-weight:700;padding:6px 4px;text-align:center;font-size:11px;letter-spacing:.05em;}
+  .standings-table th:first-child{text-align:left;}
+  .standings-table td{padding:8px 4px;text-align:center;font-weight:600;}
+  .standings-table td:first-child{text-align:left;}
+  .standings-row{border-bottom:1px solid rgba(255,255,255,0.04);transition:background .15s;}
+  .standings-row:hover{background:rgba(255,255,255,0.03);}
+  .qualify-dot{display:inline-block;width:6px;height:6px;border-radius:999px;margin-right:4px;}
+
+  /* Theme toggle */
+  .theme-btn{width:38px;height:38px;border-radius:10px;background:#1e293b;border:1px solid #334155;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background .3s;}
+  body.light .theme-btn{background:#e2e8f0;border-color:#cbd5e1;}
+
   ::-webkit-scrollbar{width:3px;}
   ::-webkit-scrollbar-thumb{background:#334155;border-radius:2px;}
 </style>
@@ -68,9 +108,12 @@
         <p style="font-size:10px;letter-spacing:.12em;color:#14b8a6;font-weight:700;">FIFA · 2026</p>
         <h1 style="font-size:22px;font-weight:900;line-height:1.1;">World Cup <span style="color:#eab308;">Encyclopedia</span></h1>
       </div>
-      <button onclick="openAdmin()" style="width:38px;height:38px;border-radius:10px;background:#1e293b;border:1px solid #334155;display:flex;align-items:center;justify-content:center;">
-        <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M20 21a8 8 0 10-16 0"/><path d="M16 11l2 2 4-4"/></svg>
-      </button>
+      <div style="display:flex;gap:8px;">
+        <button onclick="toggleTheme()" class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
+        <button onclick="openAdmin()" style="width:38px;height:38px;border-radius:10px;background:#1e293b;border:1px solid #334155;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M20 21a8 8 0 10-16 0"/><path d="M16 11l2 2 4-4"/></svg>
+        </button>
+      </div>
     </div>
     <div class="gold-line mt-3"></div>
   </header>
@@ -83,10 +126,7 @@
     </div>
     <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;" class="mb-4" id="filter-bar"></div>
     <div id="fixtures-container" class="flex flex-col gap-3 pb-4">
-      <div style="text-align:center;padding:60px 0;color:#475569;">
-        <div style="font-size:40px;">⏳</div>
-        <p style="margin-top:8px;font-size:14px;">Loading...</p>
-      </div>
+      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
     </div>
   </div>
 
@@ -97,11 +137,32 @@
       <span id="team-count" style="font-size:11px;color:#64748b;"></span>
     </div>
     <div id="teams-container" class="pb-4">
-      <div style="text-align:center;padding:60px 0;color:#475569;">
-        <div style="font-size:40px;">⏳</div>
-        <p style="margin-top:8px;font-size:14px;">Loading...</p>
-      </div>
+      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
     </div>
+  </div>
+
+  <!-- STANDINGS VIEW -->
+  <div id="view-standings" class="view px-4 pt-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 style="font-weight:800;font-size:15px;">Standings</h2>
+      <span style="font-size:11px;color:#64748b;">Group Stage</span>
+    </div>
+    <div id="standings-container" class="pb-4">
+      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
+    </div>
+  </div>
+
+  <!-- SEARCH VIEW -->
+  <div id="view-search" class="view px-4 pt-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 style="font-weight:800;font-size:15px;">Search</h2>
+    </div>
+    <div class="search-box">
+      <svg width="16" height="16" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="search-input" type="text" placeholder="Search players or teams..." oninput="renderSearch()" autocomplete="off">
+      <button onclick="document.getElementById('search-input').value='';renderSearch();" style="background:none;border:none;color:#475569;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div id="search-results" class="pb-4"></div>
   </div>
 
   <!-- STATS VIEW -->
@@ -110,10 +171,7 @@
       <h2 style="font-weight:800;font-size:15px;">Player Stats</h2>
     </div>
     <div id="stats-container" class="pb-4">
-      <div style="text-align:center;padding:60px 0;color:#475569;">
-        <div style="font-size:40px;">⏳</div>
-        <p style="margin-top:8px;font-size:14px;">Loading...</p>
-      </div>
+      <div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:40px;">⏳</div><p style="margin-top:8px;font-size:14px;">Loading...</p></div>
     </div>
   </div>
 
@@ -122,15 +180,23 @@
 <!-- BOTTOM NAV -->
 <nav id="bottom-nav">
   <button class="nav-btn active" id="nav-fixtures" onclick="switchView('fixtures')">
-    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span>Fixtures</span>
   </button>
+  <button class="nav-btn" id="nav-standings" onclick="switchView('standings')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+    <span>Standings</span>
+  </button>
   <button class="nav-btn" id="nav-teams" onclick="switchView('teams')">
-    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
     <span>Teams</span>
   </button>
+  <button class="nav-btn" id="nav-search" onclick="switchView('search')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <span>Search</span>
+  </button>
   <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
-    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
     <span>Stats</span>
   </button>
 </nav>
@@ -147,8 +213,6 @@
 
 <!-- ========== ADMIN PANEL ========== -->
 <div id="admin-panel">
-
-  <!-- Login -->
   <div id="admin-login" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;">
     <div style="width:100%;max-width:340px;">
       <div style="text-align:center;margin-bottom:32px;">
@@ -163,138 +227,65 @@
       <p id="pin-error" style="color:#ef4444;font-size:12px;text-align:center;margin-top:8px;display:none;">Wrong PIN.</p>
     </div>
   </div>
-
-  <!-- Main -->
   <div id="admin-main" style="display:none;">
     <div style="background:#1e293b;border-bottom:1px solid #334155;padding:52px 16px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
-      <div>
-        <p style="font-size:10px;color:#14b8a6;font-weight:700;letter-spacing:.1em;">ADMIN</p>
-        <h2 style="font-size:18px;font-weight:900;">WC 2026 Manager</h2>
-      </div>
+      <div><p style="font-size:10px;color:#14b8a6;font-weight:700;letter-spacing:.1em;">ADMIN</p><h2 style="font-size:18px;font-weight:900;">WC 2026 Manager</h2></div>
       <button class="btn-ghost" onclick="closeAdmin()">✕ Close</button>
     </div>
-
     <div style="padding:16px;">
-
-      <!-- Tabs -->
       <div style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;">
         <button class="btn-gold admin-tab" id="tab-fixtures" onclick="adminTab('fixtures')" style="white-space:nowrap;font-size:13px;">📅 Fixtures</button>
         <button class="btn-ghost admin-tab" id="tab-players" onclick="adminTab('players')" style="white-space:nowrap;font-size:13px;">👤 Players</button>
         <button class="btn-ghost admin-tab" id="tab-settings" onclick="adminTab('settings')" style="white-space:nowrap;font-size:13px;">⚙️ Settings</button>
       </div>
-
       <!-- FIXTURES TAB -->
       <div id="admin-fixtures" class="admin-section">
         <h3 style="font-weight:800;margin-bottom:4px;font-size:15px;">Add Fixture</h3>
-        <p style="font-size:12px;color:#64748b;margin-bottom:14px;">Teams are loaded from <code style="color:#eab308;">data.json</code>. Pick from dropdowns.</p>
-
+        <p style="font-size:12px;color:#64748b;margin-bottom:14px;">Teams loaded from <code style="color:#eab308;">teams.json</code>.</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team 1</label>
-              <select id="f-t1" class="inp"></select>
-            </div>
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team 2</label>
-              <select id="f-t2" class="inp"></select>
-            </div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team 1</label><select id="f-t1" class="inp"></select></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team 2</label><select id="f-t2" class="inp"></select></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Score T1</label>
-              <input id="f-g1" class="inp" placeholder="–" type="number">
-            </div>
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Score T2</label>
-              <input id="f-g2" class="inp" placeholder="–" type="number">
-            </div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Score T1</label><input id="f-g1" class="inp" placeholder="–" type="number"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Score T2</label><input id="f-g2" class="inp" placeholder="–" type="number"></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Stage</label>
-              <select id="f-stage" class="inp">
-                <option>Group Stage</option>
-                <option>Round of 32</option>
-                <option>Round of 16</option>
-                <option>Quarter-Final</option>
-                <option>Semi-Final</option>
-                <option>3rd Place</option>
-                <option>Final</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Group</label>
-              <input id="f-group" class="inp" placeholder="A  (optional)">
-            </div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Stage</label><select id="f-stage" class="inp"><option>Group Stage</option><option>Round of 32</option><option>Round of 16</option><option>Quarter-Final</option><option>Semi-Final</option><option>3rd Place</option><option>Final</option></select></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Group</label><input id="f-group" class="inp" placeholder="A (optional)"></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Date</label>
-              <input id="f-date" class="inp" type="date">
-            </div>
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Time</label>
-              <input id="f-time" class="inp" placeholder="18:00">
-            </div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Date</label><input id="f-date" class="inp" type="date"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Time</label><input id="f-time" class="inp" placeholder="18:00"></div>
           </div>
-          <div>
-            <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Venue</label>
-            <input id="f-venue" class="inp" placeholder="e.g. MetLife Stadium, New Jersey">
-          </div>
+          <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Venue</label><input id="f-venue" class="inp" placeholder="e.g. MetLife Stadium"></div>
         </div>
-
         <button class="btn-gold" onclick="addFixture()" style="width:100%;">+ Add Fixture</button>
-
         <div style="margin-top:20px;">
-          <p style="font-size:12px;color:#64748b;margin-bottom:10px;">Added this session — <strong style="color:#eab308;">copy the JSON below and update your data.json on GitHub to save permanently.</strong></p>
           <div id="admin-fixtures-list" style="display:flex;flex-direction:column;gap:8px;"></div>
           <div id="export-fixtures-box" style="display:none;margin-top:12px;">
-            <p style="font-size:11px;color:#64748b;margin-bottom:6px;">📋 Copy this into <code style="color:#eab308;">data.json</code> → fixtures array:</p>
+            <p style="font-size:11px;color:#64748b;margin-bottom:6px;">📋 Copy into <code style="color:#eab308;">fixtures.json</code>:</p>
             <textarea id="fixtures-json-out" class="inp" style="height:120px;font-size:11px;font-family:monospace;" readonly></textarea>
             <button class="btn-ghost" onclick="copyFixturesJSON()" style="width:100%;margin-top:6px;">📋 Copy JSON</button>
           </div>
         </div>
       </div>
-
       <!-- PLAYERS TAB -->
       <div id="admin-players" class="admin-section" style="display:none;">
         <h3 style="font-weight:800;margin-bottom:4px;font-size:15px;">Add Player</h3>
-        <p style="font-size:12px;color:#64748b;margin-bottom:14px;">Teams loaded from <code style="color:#eab308;">data.json</code>.</p>
-
+        <p style="font-size:12px;color:#64748b;margin-bottom:14px;">Teams loaded from <code style="color:#eab308;">teams.json</code>.</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
-          <div>
-            <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team</label>
-            <select id="p-team" class="inp"></select>
-          </div>
+          <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Team</label><select id="p-team" class="inp"></select></div>
           <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;">
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Player Name</label>
-              <input id="p-name" class="inp" placeholder="Full name">
-            </div>
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Jersey #</label>
-              <input id="p-num" class="inp" placeholder="10" type="number">
-            </div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Player Name</label><input id="p-name" class="inp" placeholder="Full name"></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Jersey #</label><input id="p-num" class="inp" placeholder="10" type="number"></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Position</label>
-              <select id="p-pos" class="inp">
-                <option value="GK">GK</option>
-                <option value="DEF">DEF</option>
-                <option value="MID">MID</option>
-                <option value="FWD">FWD</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Age</label>
-              <input id="p-age" class="inp" placeholder="25" type="number">
-            </div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Position</label><select id="p-pos" class="inp"><option value="GK">GK</option><option value="DEF">DEF</option><option value="MID">MID</option><option value="FWD">FWD</option></select></div>
+            <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Age</label><input id="p-age" class="inp" placeholder="25" type="number"></div>
           </div>
-          <div>
-            <label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Club</label>
-            <input id="p-club" class="inp" placeholder="e.g. Real Madrid">
-          </div>
+          <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Club</label><input id="p-club" class="inp" placeholder="e.g. Real Madrid"></div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
             <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Goals</label><input id="p-goals" class="inp" placeholder="0" type="number"></div>
             <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Assists</label><input id="p-assists" class="inp" placeholder="0" type="number"></div>
@@ -304,24 +295,19 @@
             <div><label style="font-size:11px;color:#64748b;display:block;margin-bottom:4px;">Red</label><input id="p-rc" class="inp" placeholder="0" type="number"></div>
           </div>
         </div>
-
         <button class="btn-gold" onclick="addPlayer()" style="width:100%;">+ Add Player</button>
-
         <div style="margin-top:20px;">
-          <p style="font-size:12px;color:#64748b;margin-bottom:10px;"><strong style="color:#eab308;">Copy JSON below → update data.json on GitHub to save permanently.</strong></p>
           <div id="admin-players-list" style="display:flex;flex-direction:column;gap:8px;"></div>
           <div id="export-players-box" style="display:none;margin-top:12px;">
-            <p style="font-size:11px;color:#64748b;margin-bottom:6px;">📋 Copy into <code style="color:#eab308;">data.json</code> → players array:</p>
+            <p style="font-size:11px;color:#64748b;margin-bottom:6px;">📋 Copy into <code style="color:#eab308;">players.json</code>:</p>
             <textarea id="players-json-out" class="inp" style="height:120px;font-size:11px;font-family:monospace;" readonly></textarea>
             <button class="btn-ghost" onclick="copyPlayersJSON()" style="width:100%;margin-top:6px;">📋 Copy JSON</button>
           </div>
         </div>
       </div>
-
       <!-- SETTINGS TAB -->
       <div id="admin-settings" class="admin-section" style="display:none;">
         <h3 style="font-weight:800;margin-bottom:16px;font-size:15px;">Settings</h3>
-
         <div class="card" style="padding:16px;margin-bottom:12px;">
           <p style="font-weight:700;font-size:14px;margin-bottom:4px;">Change Admin PIN</p>
           <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Default is <strong style="color:#eab308;">1234</strong></p>
@@ -330,49 +316,41 @@
           <button class="btn-gold" onclick="changePin()" style="width:100%;">Update PIN</button>
           <p id="pin-change-msg" style="font-size:12px;margin-top:6px;text-align:center;"></p>
         </div>
-
-        <div class="card" style="padding:16px;margin-bottom:12px;">
-          <p style="font-weight:700;font-size:14px;margin-bottom:8px;">How to publish updates</p>
-          <ol style="font-size:12px;color:#94a3b8;line-height:2;padding-left:16px;">
-            <li>Add fixtures/players via this admin panel</li>
-            <li>Copy the JSON output shown</li>
-            <li>Open <code style="color:#eab308;">data.json</code> in your GitHub repo</li>
-            <li>Paste into the correct array</li>
-            <li>Commit — everyone sees it instantly ✓</li>
-          </ol>
-        </div>
-
         <div class="card" style="padding:16px;">
-          <p style="font-weight:700;font-size:14px;margin-bottom:8px;">Export full data.json</p>
-          <p style="font-size:12px;color:#64748b;margin-bottom:10px;">Download the complete current data to replace your GitHub file.</p>
+          <p style="font-weight:700;font-size:14px;margin-bottom:8px;">Export full data</p>
+          <p style="font-size:12px;color:#64748b;margin-bottom:10px;">Downloads current data as a single file.</p>
           <button class="btn-gold" onclick="exportFullJSON()" style="width:100%;">⬇️ Download data.json</button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- SQUAD OVERLAY -->
-<div id="squad-overlay" class="overlay" onclick="maybeCloseOverlay(event,'squad-overlay')">
-  <div class="overlay-sheet w-full" id="squad-sheet" style="padding:20px 16px 40px;"></div>
-</div>
-
-<!-- PLAYER MODAL -->
-<div id="player-modal" class="modal" onclick="maybeCloseModal(event,'player-modal')">
-  <div class="modal-box" id="player-modal-box"></div>
-</div>
-
 <script>
 // ─────────────────────────────────────────
-//  STATE — loaded from data.json
+//  STATE
 // ─────────────────────────────────────────
 let DB = { teams: [], fixtures: [], players: [] };
-// Session additions (before user commits to GitHub)
 let SESSION = { fixtures: [], players: [] };
 
 // ─────────────────────────────────────────
-//  LOAD DATA.JSON
+//  THEME
+// ─────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('wc26_theme', isLight ? 'light' : 'dark');
+}
+function initTheme() {
+  const saved = localStorage.getItem('wc26_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
+}
+
+// ─────────────────────────────────────────
+//  LOAD DATA
 // ─────────────────────────────────────────
 async function loadData() {
   try {
@@ -385,15 +363,15 @@ async function loadData() {
     DB.fixtures = await fixturesRes.json();
     DB.players  = await playersRes.json();
   } catch(e) {
-    console.warn('JSON not fetched');
+    console.warn('JSON fetch failed:', e);
     DB = { teams: [], fixtures: [], players: [] };
   }
   renderFixtures();
   renderTeams();
+  renderStandings();
   renderStats();
 }
 
-// All data = DB + session additions
 function allFixtures() { return [...DB.fixtures, ...SESSION.fixtures]; }
 function allPlayers()  { return [...DB.players,  ...SESSION.players];  }
 function allTeams()    { return DB.teams; }
@@ -406,39 +384,32 @@ function switchView(v) {
   document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('view-' + v).classList.add('active');
   document.getElementById('nav-' + v).classList.add('active');
-  if (v === 'fixtures') renderFixtures();
-  if (v === 'teams')    renderTeams();
-  if (v === 'stats')    renderStats();
+  if (v === 'fixtures')  renderFixtures();
+  if (v === 'teams')     renderTeams();
+  if (v === 'standings') renderStandings();
+  if (v === 'stats')     renderStats();
+  if (v === 'search')    { renderSearch(); setTimeout(()=>document.getElementById('search-input').focus(),200); }
 }
 
 // ─────────────────────────────────────────
 //  FIXTURES
 // ─────────────────────────────────────────
 let activeFilter = 'All';
-
 function renderFixtures() {
   const fixtures = allFixtures();
   const container = document.getElementById('fixtures-container');
   const filterBar = document.getElementById('filter-bar');
   document.getElementById('fixture-count').textContent = fixtures.length + ' matches';
-
   const stages = ['All', ...new Set(fixtures.map(f => f.stage).filter(Boolean))];
   filterBar.innerHTML = stages.map(s => `
     <button onclick="setFilter('${s}')" style="padding:6px 14px;border-radius:999px;border:1px solid ${activeFilter===s?'#eab308':'#334155'};background:${activeFilter===s?'#eab308':'transparent'};color:${activeFilter===s?'#0f172a':'#94a3b8'};font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;">${s}</button>
   `).join('');
-
   const filtered = activeFilter === 'All' ? fixtures : fixtures.filter(f => f.stage === activeFilter);
-
-  if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📅</div><p style="margin-top:8px;font-size:14px;">No fixtures yet.</p></div>`;
-    return;
-  }
-
+  if (!filtered.length) { container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📅</div><p style="margin-top:8px;font-size:14px;">No fixtures yet.</p></div>`; return; }
   const byDate = {};
   filtered.forEach(f => { (byDate[f.date] = byDate[f.date]||[]).push(f); });
-
   container.innerHTML = Object.keys(byDate).sort().map(date => {
-    const d   = new Date(date + 'T00:00:00');
+    const d = new Date(date + 'T00:00:00');
     const lbl = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
     return `
       <div style="display:flex;align-items:center;gap:8px;margin:8px 0 4px;">
@@ -453,7 +424,7 @@ function renderFixtures() {
           <div class="card" style="padding:14px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
               <span style="font-size:11px;background:rgba(20,184,166,0.15);color:#2dd4bf;padding:2px 8px;border-radius:999px;font-weight:600;">${f.group ? 'Group '+f.group : f.stage}</span>
-              <span style="font-size:11px;color:#64748b;">${f.time ? (h=>{const[hh,mm]=h.split(':');const hr=+hh;return (hr%12||12)+':'+(mm||'00')+' '+(hr<12?'AM':'PM');})(f.time) : ''} ${f.venue ? '· '+f.venue : ''}</span>
+              <span style="font-size:11px;color:#64748b;">${f.time?(h=>{const[hh,mm]=h.split(':');const hr=+hh;return(hr%12||12)+':'+(mm||'00')+' '+(hr<12?'AM':'PM');})(f.time):''} ${f.venue?'· '+f.venue:''}</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
@@ -461,21 +432,18 @@ function renderFixtures() {
                 <span style="font-size:12px;font-weight:700;text-align:center;">${t1.name||f.t1||'TBD'}</span>
               </div>
               <div style="display:flex;flex-direction:column;align-items:center;">
-                <div style="font-size:22px;font-weight:900;color:#eab308;letter-spacing:2px;">${f.g1 != null ? f.g1 : '–'} : ${f.g2 != null ? f.g2 : '–'}</div>
-                <span style="font-size:10px;color:#475569;">${f.g1 != null ? 'FT' : 'vs'}</span>
+                <div style="font-size:22px;font-weight:900;color:#eab308;letter-spacing:2px;">${f.g1!=null?f.g1:'–'} : ${f.g2!=null?f.g2:'–'}</div>
+                <span style="font-size:10px;color:#475569;">${f.g1!=null?'FT':'vs'}</span>
               </div>
               <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
                 <span style="font-size:28px;">${t2.flag||'🏳️'}</span>
                 <span style="font-size:12px;font-weight:700;text-align:center;">${t2.name||f.t2||'TBD'}</span>
               </div>
             </div>
-          </div>
-        `;
-      }).join('')}
-    `;
+          </div>`;
+      }).join('')}`;
   }).join('');
 }
-
 function setFilter(f) { activeFilter = f; renderFixtures(); }
 
 // ─────────────────────────────────────────
@@ -485,15 +453,9 @@ function renderTeams() {
   const teams = allTeams();
   const container = document.getElementById('teams-container');
   document.getElementById('team-count').textContent = teams.length + ' nations';
-
-  if (!teams.length) {
-    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">🌍</div><p style="margin-top:8px;font-size:14px;">No teams in data.json yet.</p></div>`;
-    return;
-  }
-
+  if (!teams.length) { container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">🌍</div><p style="margin-top:8px;font-size:14px;">No teams yet.</p></div>`; return; }
   const byGroup = {};
   teams.forEach(t => { const g = t.group||'?'; (byGroup[g]=byGroup[g]||[]).push(t); });
-
   container.innerHTML = Object.keys(byGroup).sort().map(g => `
     <div style="margin-bottom:24px;">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
@@ -508,11 +470,143 @@ function renderTeams() {
               <p style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.name}</p>
               <p style="font-size:11px;color:#64748b;">${t.manager||'Manager TBC'}</p>
             </div>
-          </div>
-        `).join('')}
+          </div>`).join('')}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────
+//  STANDINGS
+// ─────────────────────────────────────────
+function renderStandings() {
+  const container = document.getElementById('standings-container');
+  const teams = allTeams();
+  const fixtures = allFixtures().filter(f => f.stage === 'Group Stage' && f.g1 != null && f.g2 != null);
+
+  if (!teams.length) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">🏆</div><p style="margin-top:8px;font-size:14px;">No data yet.</p></div>`;
+    return;
+  }
+
+  // Build stats per team
+  const stats = {};
+  teams.forEach(t => {
+    stats[t.id] = { id:t.id, mp:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 };
+  });
+
+  fixtures.forEach(f => {
+    const t1 = f.t1, t2 = f.t2;
+    const g1 = f.g1, g2 = f.g2;
+    if (!stats[t1] || !stats[t2]) return;
+    stats[t1].mp++; stats[t2].mp++;
+    stats[t1].gf += g1; stats[t1].ga += g2;
+    stats[t2].gf += g2; stats[t2].ga += g1;
+    if (g1 > g2)      { stats[t1].w++; stats[t1].pts+=3; stats[t2].l++; }
+    else if (g1 < g2) { stats[t2].w++; stats[t2].pts+=3; stats[t1].l++; }
+    else              { stats[t1].d++; stats[t1].pts+=1; stats[t2].d++; stats[t2].pts+=1; }
+  });
+
+  const byGroup = {};
+  teams.forEach(t => { const g = t.group||'?'; (byGroup[g]=byGroup[g]||[]).push(t); });
+
+  container.innerHTML = Object.keys(byGroup).sort().map(g => {
+    const rows = byGroup[g].map(t => ({ ...t, ...stats[t.id] }))
+      .sort((a,b) => b.pts-a.pts || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf);
+
+    return `
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;">GROUP ${g}</span>
+          <div style="height:1px;flex:1;background:rgba(255,255,255,0.06);"></div>
+        </div>
+        <div class="card" style="padding:10px 12px;overflow-x:auto;">
+          <table class="standings-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;width:40%;">Team</th>
+                <th>MP</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th style="color:#eab308;">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map((t,i) => `
+                <tr class="standings-row" onclick="openSquad('${t.id}')" style="cursor:pointer;">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="font-size:10px;color:#475569;width:14px;">${i+1}</span>
+                      <span style="font-size:16px;">${t.flag||'🏳️'}</span>
+                      <span style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${t.name}</span>
+                    </div>
+                  </td>
+                  <td>${t.mp||0}</td>
+                  <td>${t.w||0}</td>
+                  <td>${t.d||0}</td>
+                  <td>${t.l||0}</td>
+                  <td>${t.gf||0}</td>
+                  <td>${t.ga||0}</td>
+                  <td>${(t.gf||0)-(t.ga||0)}</td>
+                  <td style="color:#eab308;font-weight:900;">${t.pts||0}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────
+//  SEARCH
+// ─────────────────────────────────────────
+function renderSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const container = document.getElementById('search-results');
+  if (!q) {
+    container.innerHTML = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">🔍</div><p style="margin-top:8px;font-size:14px;">Search for players or teams</p></div>`;
+    return;
+  }
+  const matchedTeams = allTeams().filter(t => t.name.toLowerCase().includes(q));
+  const matchedPlayers = allPlayers().filter(p => p.name.toLowerCase().includes(q) || (p.club||'').toLowerCase().includes(q));
+
+  let html = '';
+
+  if (matchedTeams.length) {
+    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:10px;">🌍 TEAMS</p>`;
+    html += `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">`;
+    html += matchedTeams.map(t => `
+      <div class="card" style="padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openSquad('${t.id}')">
+        <span style="font-size:28px;">${t.flag||'🏳️'}</span>
+        <div>
+          <p style="font-size:14px;font-weight:700;">${t.name}</p>
+          <p style="font-size:11px;color:#64748b;">Group ${t.group||'?'} · ${t.manager||'Manager TBC'}</p>
+        </div>
+      </div>`).join('');
+    html += `</div>`;
+  }
+
+  if (matchedPlayers.length) {
+    html += `<p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:10px;">👤 PLAYERS</p>`;
+    html += `<div class="card" style="padding:4px 12px;">`;
+    const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
+    html += matchedPlayers.slice(0,30).map(p => {
+      const team = allTeams().find(t => t.id === p.team) || {};
+      return `
+        <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${p.team}')">
+          <span style="font-size:20px;">${team.flag||'🏳️'}</span>
+          <div style="flex:1;min-width:0;">
+            <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+            <p style="font-size:11px;color:#64748b;">${p.club||'—'} · ${team.name||p.team}</p>
+          </div>
+          <span style="font-size:11px;font-weight:700;color:${posColor[p.pos]||'#94a3b8'};">${p.pos}</span>
+        </div>`;
+    }).join('');
+    html += `</div>`;
+    if (matchedPlayers.length > 30) html += `<p style="font-size:12px;color:#64748b;text-align:center;margin-top:10px;">Showing 30 of ${matchedPlayers.length} results</p>`;
+  }
+
+  if (!matchedTeams.length && !matchedPlayers.length) {
+    html = `<div style="text-align:center;padding:40px 0;color:#475569;"><div style="font-size:36px;">😔</div><p style="margin-top:8px;font-size:14px;">No results for "${q}"</p></div>`;
+  }
+
+  container.innerHTML = html;
 }
 
 // ─────────────────────────────────────────
@@ -526,31 +620,24 @@ function openSquad(teamId) {
   squad.forEach(p => { if (byPos[p.pos]) byPos[p.pos].push(p); });
   const posLabel = { GK:'Goalkeepers 🧤', DEF:'Defenders 🛡️', MID:'Midfielders ⚙️', FWD:'Forwards ⚡' };
   const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
-
   let html = '';
   ['GK','DEF','MID','FWD'].forEach(pos => {
     if (!byPos[pos].length) return;
-    html += `
-      <div style="margin-bottom:18px;">
-        <p style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${posColor[pos]};margin-bottom:6px;">${posLabel[pos]}</p>
-        ${byPos[pos].map(p => `
-          <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${teamId}')">
-            <div style="width:28px;height:28px;border-radius:999px;background:#1e293b;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="font-size:11px;font-weight:700;color:#94a3b8;">${p.num||'?'}</span>
-            </div>
-            <div style="flex:1;min-width:0;">
-              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
-              <p style="font-size:11px;color:#64748b;">${p.club||'—'}</p>
-            </div>
-            <svg width="14" height="14" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-        `).join('')}
-      </div>
-    `;
+    html += `<div style="margin-bottom:18px;"><p style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${posColor[pos]};margin-bottom:6px;">${posLabel[pos]}</p>`;
+    html += byPos[pos].map(p => `
+      <div class="player-row" onclick="openPlayerModal('${p.id||p.name}','${teamId}')">
+        <div style="width:28px;height:28px;border-radius:999px;background:#1e293b;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:11px;font-weight:700;color:#94a3b8;">${p.num||'?'}</span>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
+          <p style="font-size:11px;color:#64748b;">${p.club||'—'}</p>
+        </div>
+        <svg width="14" height="14" fill="none" stroke="#475569" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>`).join('');
+    html += `</div>`;
   });
-
   if (!squad.length) html = `<p style="color:#64748b;font-size:14px;padding:20px 0;">No players added yet.</p>`;
-
   document.getElementById('squad-sheet').innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
       <div style="display:flex;align-items:center;gap:12px;">
@@ -563,8 +650,7 @@ function openSquad(teamId) {
       <button onclick="closeOverlay('squad-overlay')" style="width:34px;height:34px;border-radius:999px;background:#1e293b;border:none;color:#94a3b8;font-size:18px;cursor:pointer;">×</button>
     </div>
     <div class="gold-line" style="margin-bottom:16px;"></div>
-    ${html}
-  `;
+    ${html}`;
   document.getElementById('squad-overlay').classList.add('open');
   document.body.classList.add('locked');
 }
@@ -577,7 +663,6 @@ function openPlayerModal(playerId, teamId) {
   const team = allTeams().find(t => t.id === teamId);
   if (!p) return;
   const posColor = { GK:'#fbbf24', DEF:'#34d399', MID:'#60a5fa', FWD:'#f87171' };
-
   document.getElementById('player-modal-box').innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
       <div style="display:flex;align-items:center;gap:10px;">
@@ -606,8 +691,7 @@ function openPlayerModal(playerId, teamId) {
       <div class="stat-cell"><p style="font-size:20px;font-weight:900;">${p.mins||0}</p><p style="font-size:11px;color:#64748b;">Mins</p></div>
       <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#fbbf24;">${p.yc||0}</p><p style="font-size:11px;color:#64748b;">Yellow 🟨</p></div>
       <div class="stat-cell"><p style="font-size:20px;font-weight:900;color:#ef4444;">${p.rc||0}</p><p style="font-size:11px;color:#64748b;">Red 🟥</p></div>
-    </div>
-  `;
+    </div>`;
   document.getElementById('player-modal').classList.add('open');
 }
 
@@ -615,17 +699,13 @@ function openPlayerModal(playerId, teamId) {
 //  STATS
 // ─────────────────────────────────────────
 function renderStats() {
-  const players   = allPlayers();
+  const players = allPlayers();
   const container = document.getElementById('stats-container');
-  if (!players.length) {
-    container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📊</div><p style="margin-top:8px;font-size:14px;">No player data yet.</p></div>`;
-    return;
-  }
-  const scorers  = [...players].filter(p=>p.goals>0).sort((a,b)=>b.goals-a.goals).slice(0,10);
-  const assisters= [...players].filter(p=>p.assists>0).sort((a,b)=>b.assists-a.assists).slice(0,5);
-  const getFlag  = id => allTeams().find(t=>t.id===id)?.flag||'🏳️';
-  const getTeam  = id => allTeams().find(t=>t.id===id)?.name||id;
-
+  if (!players.length) { container.innerHTML = `<div style="text-align:center;padding:60px 0;color:#475569;"><div style="font-size:36px;">📊</div><p style="margin-top:8px;font-size:14px;">No player data yet.</p></div>`; return; }
+  const scorers   = [...players].filter(p=>p.goals>0).sort((a,b)=>b.goals-a.goals).slice(0,10);
+  const assisters = [...players].filter(p=>p.assists>0).sort((a,b)=>b.assists-a.assists).slice(0,5);
+  const getFlag = id => allTeams().find(t=>t.id===id)?.flag||'🏳️';
+  const getTeam = id => allTeams().find(t=>t.id===id)?.name||id;
   const row = (p,i,stat,color,lbl) => `
     <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;" onclick="openPlayerModal('${p.id||p.name}','${p.team}')">
       <span style="font-size:12px;font-weight:700;color:#475569;width:18px;">${i+1}</span>
@@ -634,17 +714,15 @@ function renderStats() {
       <span style="font-size:18px;font-weight:900;color:${color};">${p[stat]||0}</span>
       <span style="font-size:11px;color:#64748b;">${lbl}</span>
     </div>`;
-
   container.innerHTML = `
     <div style="margin-bottom:24px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#eab308;margin-bottom:12px;">⚽ TOP SCORERS</p>
-      <div class="card" style="padding:4px 12px;">${scorers.length ? scorers.map((p,i)=>row(p,i,'goals','#eab308','goals')).join('') : '<p style="color:#475569;font-size:13px;padding:12px 0;">No goals recorded yet.</p>'}</div>
+      <div class="card" style="padding:4px 12px;">${scorers.length?scorers.map((p,i)=>row(p,i,'goals','#eab308','goals')).join(''):'<p style="color:#475569;font-size:13px;padding:12px 0;">No goals recorded yet.</p>'}</div>
     </div>
     <div>
       <p style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#2dd4bf;margin-bottom:12px;">🎯 TOP ASSISTS</p>
-      <div class="card" style="padding:4px 12px;">${assisters.length ? assisters.map((p,i)=>row(p,i,'assists','#2dd4bf','ast')).join('') : '<p style="color:#475569;font-size:13px;padding:12px 0;">No assists recorded yet.</p>'}</div>
-    </div>
-  `;
+      <div class="card" style="padding:4px 12px;">${assisters.length?assisters.map((p,i)=>row(p,i,'assists','#2dd4bf','ast')).join(''):'<p style="color:#475569;font-size:13px;padding:12px 0;">No assists recorded yet.</p>'}</div>
+    </div>`;
 }
 
 // ─────────────────────────────────────────
@@ -666,10 +744,7 @@ function openAdmin() {
   document.getElementById('pin-error').style.display = 'none';
   document.body.classList.add('locked');
 }
-function closeAdmin() {
-  document.getElementById('admin-panel').classList.remove('open');
-  document.body.classList.remove('locked');
-}
+function closeAdmin() { document.getElementById('admin-panel').classList.remove('open'); document.body.classList.remove('locked'); }
 function checkPin() {
   const val = document.getElementById('pin-input').value;
   if (val === (localStorage.getItem('wc26_pin')||'1234')) {
@@ -681,7 +756,6 @@ function checkPin() {
     document.getElementById('pin-input').value = '';
   }
 }
-
 function adminTab(tab) {
   document.querySelectorAll('.admin-section').forEach(s=>s.style.display='none');
   document.querySelectorAll('.admin-tab').forEach(b=>{ b.style.background='transparent'; b.style.border='1px solid #334155'; b.style.color='#94a3b8'; });
@@ -691,183 +765,80 @@ function adminTab(tab) {
   if (tab==='fixtures') { populateTeamDropdowns('f-t1','f-t2'); renderAdminFixtures(); }
   if (tab==='players')  { populateTeamDropdowns('p-team'); renderAdminPlayers(); }
 }
-
 function populateTeamDropdowns(...ids) {
   const teams = allTeams();
-  const opts  = teams.length
-    ? '<option value="">Pick team...</option>' + teams.map(t=>`<option value="${t.id}">${t.flag||''} ${t.name}</option>`).join('')
-    : '<option value="">No teams in data.json</option>';
+  const opts = teams.length ? '<option value="">Pick team...</option>'+teams.map(t=>`<option value="${t.id}">${t.flag||''} ${t.name}</option>`).join('') : '<option value="">No teams</option>';
   ids.forEach(id => { document.getElementById(id).innerHTML = opts; });
 }
-
-// ── ADD FIXTURE ──
 function addFixture() {
   const t1id = document.getElementById('f-t1').value;
   const t2id = document.getElementById('f-t2').value;
   if (!t1id || !t2id) { alert('Select both teams.'); return; }
-  const f = {
-    id:    Date.now(),
-    t1:    t1id,
-    t2:    t2id,
-    g1:    document.getElementById('f-g1').value !== '' ? parseInt(document.getElementById('f-g1').value) : null,
-    g2:    document.getElementById('f-g2').value !== '' ? parseInt(document.getElementById('f-g2').value) : null,
-    stage: document.getElementById('f-stage').value,
-    group: document.getElementById('f-group').value.trim().toUpperCase(),
-    date:  document.getElementById('f-date').value,
-    time:  document.getElementById('f-time').value.trim(),
-    venue: document.getElementById('f-venue').value.trim(),
-  };
+  const f = { id:Date.now(), t1:t1id, t2:t2id, g1:document.getElementById('f-g1').value!==''?parseInt(document.getElementById('f-g1').value):null, g2:document.getElementById('f-g2').value!==''?parseInt(document.getElementById('f-g2').value):null, stage:document.getElementById('f-stage').value, group:document.getElementById('f-group').value.trim().toUpperCase(), date:document.getElementById('f-date').value, time:document.getElementById('f-time').value.trim(), venue:document.getElementById('f-venue').value.trim() };
   SESSION.fixtures.push(f);
   ['f-g1','f-g2','f-group','f-time','f-venue','f-date'].forEach(id=>document.getElementById(id).value='');
-  renderAdminFixtures();
-  renderFixtures();
-  alert('Fixture added ✓  (Copy the JSON below → paste into data.json on GitHub to save permanently)');
+  renderAdminFixtures(); renderFixtures();
+  alert('Fixture added ✓');
 }
-
 function renderAdminFixtures() {
   const list = SESSION.fixtures;
-  const el   = document.getElementById('admin-fixtures-list');
-  const box  = document.getElementById('export-fixtures-box');
+  const el = document.getElementById('admin-fixtures-list');
+  const box = document.getElementById('export-fixtures-box');
   if (!list.length) { el.innerHTML='<p style="color:#475569;font-size:13px;">Nothing added this session.</p>'; box.style.display='none'; return; }
   const teams = allTeams();
   el.innerHTML = list.slice().reverse().map(f => {
     const t1 = teams.find(t=>t.id===f.t1)||{name:f.t1};
     const t2 = teams.find(t=>t.id===f.t2)||{name:f.t2};
-    return `
-      <div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;">
-        <div style="flex:1;min-width:0;">
-          <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t1.flag||''} ${t1.name} vs ${t2.flag||''} ${t2.name}</p>
-          <p style="font-size:11px;color:#64748b;">${f.date||''} · ${f.stage}</p>
-        </div>
-        <button class="btn-ghost" onclick="editSessionFixture(${f.id})" style="font-size:12px;padding:6px 10px;">✏️</button>
-        <button class="btn-red" onclick="removeSession('fixtures',${f.id})">Del</button>
-      </div>`;
+    return `<div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;"><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:700;">${t1.flag||''} ${t1.name} vs ${t2.flag||''} ${t2.name}</p><p style="font-size:11px;color:#64748b;">${f.date||''} · ${f.stage}</p></div><button class="btn-red" onclick="removeSession('fixtures',${f.id})">Del</button></div>`;
   }).join('');
   box.style.display='block';
   document.getElementById('fixtures-json-out').value = JSON.stringify(list, null, 2);
 }
-
-// ── ADD PLAYER ──
 function addPlayer() {
   const teamId = document.getElementById('p-team').value;
-  const name   = document.getElementById('p-name').value.trim();
+  const name = document.getElementById('p-name').value.trim();
   if (!teamId || !name) { alert('Select a team and enter a name.'); return; }
-  const p = {
-    id:      Date.now(),
-    team:    teamId,
-    name,
-    num:     document.getElementById('p-num').value.trim(),
-    pos:     document.getElementById('p-pos').value,
-    age:     document.getElementById('p-age').value.trim(),
-    club:    document.getElementById('p-club').value.trim(),
-    goals:   parseInt(document.getElementById('p-goals').value)||0,
-    assists: parseInt(document.getElementById('p-assists').value)||0,
-    played:  parseInt(document.getElementById('p-played').value)||0,
-    mins:    parseInt(document.getElementById('p-mins').value)||0,
-    yc:      parseInt(document.getElementById('p-yc').value)||0,
-    rc:      parseInt(document.getElementById('p-rc').value)||0,
-  };
+  const p = { id:Date.now(), team:teamId, name, num:document.getElementById('p-num').value.trim(), pos:document.getElementById('p-pos').value, age:document.getElementById('p-age').value.trim(), club:document.getElementById('p-club').value.trim(), goals:parseInt(document.getElementById('p-goals').value)||0, assists:parseInt(document.getElementById('p-assists').value)||0, played:parseInt(document.getElementById('p-played').value)||0, mins:parseInt(document.getElementById('p-mins').value)||0, yc:parseInt(document.getElementById('p-yc').value)||0, rc:parseInt(document.getElementById('p-rc').value)||0 };
   SESSION.players.push(p);
   ['p-name','p-num','p-age','p-club','p-goals','p-assists','p-played','p-mins','p-yc','p-rc'].forEach(id=>document.getElementById(id).value='');
-  renderAdminPlayers();
-  renderStats();
-  alert('Player added ✓  (Copy the JSON below → paste into data.json on GitHub)');
+  renderAdminPlayers(); renderStats();
+  alert('Player added ✓');
 }
-
 function renderAdminPlayers() {
-  const list  = SESSION.players;
+  const list = SESSION.players;
   const teams = allTeams();
-  const el    = document.getElementById('admin-players-list');
-  const box   = document.getElementById('export-players-box');
+  const el = document.getElementById('admin-players-list');
+  const box = document.getElementById('export-players-box');
   if (!list.length) { el.innerHTML='<p style="color:#475569;font-size:13px;">Nothing added this session.</p>'; box.style.display='none'; return; }
-  el.innerHTML = list.slice().reverse().map(p=>{
-    const team = teams.find(t=>t.id===p.team)||{};
-    return `
-      <div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;">
-        <span style="font-size:20px;">${team.flag||'🏳️'}</span>
-        <div style="flex:1;min-width:0;">
-          <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">#${p.num||'?'} ${p.name}</p>
-          <p style="font-size:11px;color:#64748b;">${p.pos} · ${team.name||p.team}</p>
-        </div>
-        <button class="btn-ghost" onclick="editSessionPlayer(${p.id})" style="font-size:12px;padding:6px 10px;">✏️</button>
-        <button class="btn-red" onclick="removeSession('players',${p.id})">Del</button>
-      </div>`;
-  }).join('');
+  el.innerHTML = list.slice().reverse().map(p=>{ const team=teams.find(t=>t.id===p.team)||{}; return `<div class="card" style="padding:10px 12px;display:flex;align-items:center;gap:10px;"><span style="font-size:20px;">${team.flag||'🏳️'}</span><div style="flex:1;min-width:0;"><p style="font-size:13px;font-weight:700;">#${p.num||'?'} ${p.name}</p><p style="font-size:11px;color:#64748b;">${p.pos} · ${team.name||p.team}</p></div><button class="btn-red" onclick="removeSession('players',${p.id})">Del</button></div>`; }).join('');
   box.style.display='block';
   document.getElementById('players-json-out').value = JSON.stringify(list, null, 2);
-}
-
-function editSessionFixture(id) {
-  const f = SESSION.fixtures.find(x=>x.id===id);
-  if (!f) return;
-  document.getElementById('f-t1').value    = f.t1;
-  document.getElementById('f-t2').value    = f.t2;
-  document.getElementById('f-g1').value    = f.g1 ?? '';
-  document.getElementById('f-g2').value    = f.g2 ?? '';
-  document.getElementById('f-stage').value = f.stage;
-  document.getElementById('f-group').value = f.group;
-  document.getElementById('f-date').value  = f.date;
-  document.getElementById('f-time').value  = f.time;
-  document.getElementById('f-venue').value = f.venue;
-  removeSession('fixtures', id);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function editSessionPlayer(id) {
-  const p = SESSION.players.find(x=>x.id===id);
-  if (!p) return;
-  document.getElementById('p-team').value    = p.team;
-  document.getElementById('p-name').value    = p.name;
-  document.getElementById('p-num').value     = p.num;
-  document.getElementById('p-pos').value     = p.pos;
-  document.getElementById('p-age').value     = p.age;
-  document.getElementById('p-club').value    = p.club;
-  document.getElementById('p-goals').value   = p.goals;
-  document.getElementById('p-assists').value = p.assists;
-  document.getElementById('p-played').value  = p.played;
-  document.getElementById('p-mins').value    = p.mins;
-  document.getElementById('p-yc').value      = p.yc;
-  document.getElementById('p-rc').value      = p.rc;
-  removeSession('players', id);
-  window.scrollTo({top:0,behavior:'smooth'});
 }
 function removeSession(type, id) {
   SESSION[type] = SESSION[type].filter(x=>x.id!==id);
   if (type==='fixtures') { renderAdminFixtures(); renderFixtures(); }
   if (type==='players')  { renderAdminPlayers();  renderStats(); }
 }
-
 function copyFixturesJSON() { navigator.clipboard.writeText(document.getElementById('fixtures-json-out').value).then(()=>alert('Copied!')); }
 function copyPlayersJSON()  { navigator.clipboard.writeText(document.getElementById('players-json-out').value).then(()=>alert('Copied!')); }
-
-// ── SETTINGS ──
 function changePin() {
-  const np  = document.getElementById('new-pin').value;
-  const cp  = document.getElementById('confirm-pin').value;
-  const msg = document.getElementById('pin-change-msg');
+  const np=document.getElementById('new-pin').value, cp=document.getElementById('confirm-pin').value, msg=document.getElementById('pin-change-msg');
   if (!np) { msg.style.color='#ef4444'; msg.textContent='Enter a new PIN.'; return; }
   if (np!==cp) { msg.style.color='#ef4444'; msg.textContent='PINs do not match.'; return; }
   localStorage.setItem('wc26_pin', np);
   msg.style.color='#34d399'; msg.textContent='PIN updated ✓';
-  document.getElementById('new-pin').value='';
-  document.getElementById('confirm-pin').value='';
+  document.getElementById('new-pin').value=''; document.getElementById('confirm-pin').value='';
 }
-
 function exportFullJSON() {
-  const full = {
-    teams:    DB.teams,
-    fixtures: allFixtures(),
-    players:  allPlayers(),
-  };
-  const blob = new Blob([JSON.stringify(full, null, 2)], {type:'application/json'});
-  const a    = document.createElement('a');
-  a.href     = URL.createObjectURL(blob);
-  a.download = 'data.json';
-  a.click();
+  const full = { teams:DB.teams, fixtures:allFixtures(), players:allPlayers() };
+  const blob = new Blob([JSON.stringify(full,null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click();
 }
 
 // ─────────────────────────────────────────
 //  BOOT
 // ─────────────────────────────────────────
+initTheme();
 loadData();
 </script>
 </body>
