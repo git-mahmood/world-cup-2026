@@ -962,7 +962,7 @@
   {"id":1000000925,"team":"ARG","name":"Rodrigo De Paul","num":"7","pos":"MID","age":"32","club":"Atlético Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000926,"team":"ARG","name":"Enzo Fernández","num":"24","pos":"MID","age":"25","club":"Chelsea","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000927,"team":"ARG","name":"Alexis Mac Allister","num":"20","pos":"MID","age":"27","club":"Liverpool","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
-  {"id":1000000928,"team":"ARG","name":"Lionel Messi","num":"10","pos":"FWD","age":"38","club":"Inter Miami","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
+  {"id":1000000928,"team":"ARG","name":"Lionel Messi","num":"10","pos":"FWD","age":"38","club":"Inter Miami","goals":3,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000929,"team":"ARG","name":"Julián Álvarez","num":"9","pos":"FWD","age":"26","club":"Atlético Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000930,"team":"ARG","name":"Thiago Almada","num":"16","pos":"FWD","age":"25","club":"Botafogo","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000931,"team":"ARG","name":"Geronimo Rulli","num":"1","pos":"GK","age":"34","club":"Marseille","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
