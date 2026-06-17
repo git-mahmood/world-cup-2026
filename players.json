@@ -937,7 +937,7 @@
   {"id":1000000901,"team":"NOR","name":"Martin Ødegaard","num":"10","pos":"MID","age":"27","club":"Arsenal","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000902,"team":"NOR","name":"Oscar Bobb","num":"22","pos":"MID","age":"22","club":"Fulham","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000903,"team":"NOR","name":"Antonio Nusa","num":"20","pos":"FWD","age":"21","club":"RB Leipzig","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
-  {"id":1000000904,"team":"NOR","name":"Erling Haaland","num":"9","pos":"FWD","age":"25","club":"Manchester City","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
+  {"id":1000000904,"team":"NOR","name":"Erling Haaland","num":"9","pos":"FWD","age":"25","club":"Manchester City","goals":2,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000905,"team":"NOR","name":"Egil Selvik","num":"13","pos":"GK","age":"28","club":"Watford","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000906,"team":"NOR","name":"Sander Tangvik","num":"12","pos":"GK","age":"23","club":"Hamburger SV","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000907,"team":"NOR","name":"Fredrik André Bjørkan","num":"15","pos":"DEF","age":"27","club":"FK Bodø/Glimt","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
