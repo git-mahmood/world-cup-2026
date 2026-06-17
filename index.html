@@ -878,7 +878,7 @@ function renderBracket() {
   const koFixtures = allF.filter(f => stageOrder.includes(f.stage));
 
   if (!koFixtures.length) {
-    container.innerHTML = `<div style="text-align:center;padding:60px 20px;color:#475569;min-width:300px;"><div style="font-size:40px;">🏆</div><p style="margin-top:8px;font-size:14px;">No knockout fixtures yet.</p><p style="font-size:12px;margin-top:4px;">Add them via the admin panel with stage = "Round of 32" etc.</p></div>`;
+    container.innerHTML = `<div style="text-align:center;padding:60px 20px;color:#475569;min-width:300px;"><div style="font-size:40px;">🏆</div><p style="margin-top:8px;font-size:14px;">No knockout fixtures yet.</p></div>`;
     return;
   }
 
