@@ -858,7 +858,7 @@
   {"id":1000000825,"team":"FRA","name":"Adrien Rabiot","num":"14","pos":"MID","age":"31","club":"Marseille","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000826,"team":"FRA","name":"Antoine Griezmann","num":"7","pos":"FWD","age":"35","club":"Atlético Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000827,"team":"FRA","name":"Ousmane Dembélé","num":"11","pos":"FWD","age":"29","club":"Paris Saint-Germain","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
-  {"id":1000000828,"team":"FRA","name":"Kylian Mbappé","num":"10","pos":"FWD","age":"27","club":"Real Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
+  {"id":1000000828,"team":"FRA","name":"Kylian Mbappé","num":"10","pos":"FWD","age":"27","club":"Real Madrid","goals":2,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000829,"team":"FRA","name":"Brice Samba","num":"1","pos":"GK","age":"32","club":"Lens","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000830,"team":"FRA","name":"Alphonse Areola","num":"23","pos":"GK","age":"33","club":"West Ham United","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000831,"team":"FRA","name":"Ibrahima Konaté","num":"2","pos":"DEF","age":"27","club":"Liverpool","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
