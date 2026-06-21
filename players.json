@@ -864,7 +864,7 @@
   {"id":1000000831,"team":"FRA","name":"Ibrahima Konaté","num":"2","pos":"DEF","age":"27","club":"Liverpool","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000832,"team":"FRA","name":"Benjamin Pavard","num":"3","pos":"DEF","age":"30","club":"Inter Milan","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000833,"team":"FRA","name":"Jonathan Clauss","num":"21","pos":"DEF","age":"33","club":"Nice","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
-  {"id":1000000844,"team":"FRA","name":"Ferland Mendy","num":"19","pos":"DEF","age":"31","club":"Real Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
+  {"id":1000000834,"team":"FRA","name":"Ferland Mendy","num":"19","pos":"DEF","age":"31","club":"Real Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000835,"team":"FRA","name":"Eduardo Camavinga","num":"6","pos":"MID","age":"23","club":"Real Madrid","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000836,"team":"FRA","name":"Youssouf Fofana","num":"19","pos":"MID","age":"27","club":"Milan","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000000837,"team":"FRA","name":"Warren Zaïre-Emery","num":"18","pos":"MID","age":"20","club":"Paris Saint-Germain","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
@@ -1277,6 +1277,6 @@
   {"id":1000001218,"team":"COL","name":"Jhon Durán","num":"19","pos":"FWD","age":"22","club":"Aston Villa","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000001219,"team":"COL","name":"Luis Sinisterra","num":"18","pos":"FWD","age":"27","club":"AFC Bournemouth","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
   {"id":1000001220,"team":"COL","name":"Rafael Santos Borré","num":"9","pos":"FWD","age":"30","club":"Internacional","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
-  {"id":1000001232,"team":"COL","name":"Miguel Borja","num":"25","pos":"FWD","age":"33","club":"River Plate","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0},
+  {"id":1000001232,"team":"COL","name":"Miguel Borja","num":"25","pos":"FWD","age":"33","club":"River Plate","goals":0,"assists":0,"played":0,"mins":0,"yc":0,"rc":0}
 
 ]
