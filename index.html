@@ -197,7 +197,6 @@
     <!-- Award sub-tabs -->
     <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:20px;" id="award-tabs">
       <button class="award-tab active" id="awdtab-boot" onclick="switchAwardTab('boot')">🥇 Golden Boot</button>
-      <button class="award-tab" id="awdtab-glove" onclick="switchAwardTab('glove')">🧤 Golden Glove</button>
       <button class="award-tab" id="awdtab-assist" onclick="switchAwardTab('assist')">🎯 Most Assists</button>
       <button class="award-tab" id="awdtab-cards" onclick="switchAwardTab('cards')">🟨 Discipline</button>
     </div>
@@ -691,80 +690,6 @@ function renderAwards(tab) {
     }
 
     if (!top3.length) html += `<div style="text-align:center;padding:20px;color:#475569;font-size:13px;">No goals recorded yet.</div>`;
-    container.innerHTML = html;
-    return;
-  }
-
-  if (tab === 'glove') {
-    // Auto-calculate clean sheets from fixtures
-    const completedGS = allFixtures().filter(f => f.stage === 'Group Stage' && f.g1 != null && f.g2 != null);
-    const csMap = {}; // teamId -> clean sheets
-    completedGS.forEach(f => {
-      if (!csMap[f.t1]) csMap[f.t1]=0;
-      if (!csMap[f.t2]) csMap[f.t2]=0;
-      if (f.g2 === 0) csMap[f.t1]++;
-      if (f.g1 === 0) csMap[f.t2]++;
-    });
-
-    // Also check knockout fixtures
-    const completedKO = allFixtures().filter(f => f.stage !== 'Group Stage' && f.g1 != null && f.g2 != null);
-    completedKO.forEach(f => {
-      if (!csMap[f.t1]) csMap[f.t1]=0;
-      if (!csMap[f.t2]) csMap[f.t2]=0;
-      if (f.g2 === 0) csMap[f.t1]++;
-      if (f.g1 === 0) csMap[f.t2]++;
-    });
-
-    // Get GKs and attach their team's clean sheets
-    const gks = players.filter(p => p.pos === 'GK' && p.played > 0).map(p => ({
-      ...p,
-      cs: csMap[p.team] || 0,
-    })).sort((a,b) => b.cs-a.cs || b.played-a.played);
-
-    let html = `<div style="text-align:center;margin-bottom:20px;"><div style="font-size:32px;">🧤</div><p style="font-size:13px;font-weight:700;margin-top:4px;">Golden Glove</p><p style="font-size:11px;color:#64748b;">Best GK by clean sheets · auto-calculated from results</p></div>`;
-
-    if (!gks.length) { html += `<div style="text-align:center;padding:20px;color:#475569;font-size:13px;">No GK data yet. Make sure goalkeepers have Played > 0.</div>`; container.innerHTML=html; return; }
-
-    const top3 = gks.slice(0,3);
-    const rest  = gks.slice(3,12);
-    const podiumColors = ['podium-1','podium-2','podium-3'];
-    const rankColors   = ['rank-1','rank-2','rank-3'];
-    const order = top3.length >= 3 ? [1,0,2] : top3.length === 2 ? [0,1] : [0];
-
-    html += `<div style="display:grid;grid-template-columns:repeat(${Math.min(top3.length,3)},1fr);gap:8px;margin-bottom:20px;align-items:end;">`;
-    order.slice(0,top3.length).forEach(idx => {
-      if (idx >= top3.length) return;
-      const p = top3[idx];
-      html += `
-        <div class="podium-card ${podiumColors[idx]}" onclick="openPlayerModal(${p.id},'${p.team}')" style="cursor:pointer;">
-          <div class="rank-badge ${rankColors[idx]}">${idx+1}</div>
-          <div style="font-size:28px;margin:8px 0 4px;">${getFlag(p.team)}</div>
-          <p style="font-size:12px;font-weight:900;line-height:1.2;">${p.name}</p>
-          <p style="font-size:10px;color:#64748b;margin-top:2px;">${getTeam(p.team)}</p>
-          <div style="margin-top:10px;font-size:26px;font-weight:900;color:#2dd4bf;">${p.cs}</div>
-          <p style="font-size:10px;color:#64748b;">clean sheets</p>
-          <p style="font-size:10px;color:#475569;margin-top:2px;">${p.played} played</p>
-        </div>`;
-    });
-    html += `</div>`;
-
-    if (rest.length) {
-      html += `<div class="card" style="padding:4px 12px;">`;
-      rest.forEach((p,i) => {
-        html += `
-          <div class="player-row" onclick="openPlayerModal(${p.id},'${p.team}')">
-            <span style="font-size:12px;font-weight:700;color:#475569;width:22px;">${i+4}</span>
-            <span style="font-size:20px;">${getFlag(p.team)}</span>
-            <div style="flex:1;min-width:0;">
-              <p style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</p>
-              <p style="font-size:11px;color:#64748b;">${getTeam(p.team)} · ${p.played} played</p>
-            </div>
-            <span style="font-size:18px;font-weight:900;color:#2dd4bf;">${p.cs}</span>
-            <span style="font-size:11px;color:#64748b;">CS</span>
-          </div>`;
-      });
-      html += `</div>`;
-    }
     container.innerHTML = html;
     return;
   }
